@@ -1,0 +1,22 @@
+version: "3"
+services:
+  peerprep_history_service_database:
+    container_name: peerprep_history_service_database
+    image: postgres:16-bookworm
+    environment:
+      POSTGRES_USER: ${HS_DB_USER}
+      POSTGRES_PASSWORD: ${HS_DB_PASS}
+      POSTGRES_DB: ${HS_DB}
+    
+    ports: 
+      - 5432:5432
+
+    restart: unless-stopped
+    
+    networks:
+      - peerprep
+
+networks:
+  peerprep:
+    external: true
+    name: peerprep
