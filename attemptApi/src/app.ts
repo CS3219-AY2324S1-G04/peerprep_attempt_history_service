@@ -5,6 +5,7 @@ import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import express, { Request, Response } from 'express';
 import cors from 'cors'
+import history from './routes/history'
 
 import Config from './dataStructs/config';
 
@@ -52,6 +53,7 @@ export default class App {
   }
 
   private routes(): void {
+    this.app.use('/attempt-service/', history)
   }
 
   private enableDevFeatures(): void {

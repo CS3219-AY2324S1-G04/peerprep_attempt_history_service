@@ -6,10 +6,13 @@
 export default class Config {
   // Variable names that are found in environment
   private static readonly envVarDatabaseHost: string = 'HS_DB_HOST';
-  private static readonly envVarDatabasePort: string = 'HS_DB_PORT';
+  private static readonly envVarDatabasePort: string = 'HS_DB_PORT'
   private static readonly envVarDatabaseUser: string = 'HS_DB_USER';
   private static readonly envVarDatabasePass: string = 'HS_DB_PASS';
   private static readonly envVarDatabaseDB: string = 'HS_DB';
+
+  private static readonly envVarDatabaseTimeout: string = 'DATABASE_CONNECTION_TIMEOUT_MILLIS';
+  private static readonly envVarDatabasePool: string = 'DATABASE_MAX_CLIENT_COUNT';
 
   private static readonly envVarExpressPort: string = 'HS_EXPRESS_PORT';
   private static readonly appModeEnvVar: string = 'NODE_ENV';
@@ -24,11 +27,13 @@ export default class Config {
   public readonly dbUser: string;
   public readonly dbPass: string;
   public readonly dbDB: string;
+  public readonly dbTimeout: number;
+  public readonly dbPool: number;
 
   public readonly expressPort: number;
-  
+
   public readonly userServiceURL: string;
-  
+
   /** Copies from Development variables */
   public readonly isDevEnv: boolean;
 
@@ -42,44 +47,50 @@ export default class Config {
    *
    * @param env - Environment variables.
    */
-  private constructor(env: NodeJS.ProcessEnv = process.env, localDev : boolean = false) {
+  private constructor(env: NodeJS.ProcessEnv = process.env, localDev: boolean = false) {
 
     this.isDevEnv = env[Config.appModeEnvVar] === 'development';
-    
-    if (localDev) {
+
+    if (!localDev) {
       this.dbHost = 'localhost';
       this.dbPort = 5432;
-      this.dbUser = 'admin'
+      this.dbUser = 'postgres'
       this.dbPass = 'password'
-      this.dbDB = 'historyservice'
-      
+      this.dbDB = 'user'
+
       this.expressPort = 9010;
-      
+
       const userServiceHost = 'localhost';
       const userServicePort = 9000;
       this.userServiceURL = `http://${userServiceHost}:${userServicePort}`;
 
+      this.dbTimeout = 0;
+      this.dbPool = 20;
+
     } else {
       this.dbHost = this.getEnvAsString(env, Config.envVarDatabaseHost)
-      this.dbPort = this.getEnvAsInt(env, Config.envVarDatabasePort); 
+      this.dbPort = this.getEnvAsInt(env, Config.envVarDatabasePort);
       this.dbUser = this.getEnvAsString(env, Config.envVarDatabaseUser)
       this.dbPass = this.getEnvAsString(env, Config.envVarDatabasePass)
       this.dbDB = this.getEnvAsString(env, Config.envVarDatabaseDB)
-      
-      this.expressPort = this.getEnvAsInt(env, Config.envVarExpressPort); ;
-      
+
+      this.expressPort = this.getEnvAsInt(env, Config.envVarExpressPort);
+
       const userServiceHost = this.getEnvAsString(env, Config.envUserServiceHost);
-      const userServicePort = this.getEnvAsInt(env, Config.envUserServiceHost);;
+      const userServicePort = this.getEnvAsInt(env, Config.envUserServicePort);
       this.userServiceURL = `http://${userServiceHost}:${userServicePort}`;
+
+      this.dbTimeout = this.getEnvAsInt(env, Config.envVarDatabaseTimeout);
+      this.dbPool = this.getEnvAsInt(env, Config.envVarDatabasePool);
 
     }
   }
 
-    /**
-   * Instantiates config if not yet done, else returns the config. 
-   * 
-   * @returns The current running configuration
-   */
+  /**
+ * Instantiates config if not yet done, else returns the config. 
+ * 
+ * @returns The current running configuration
+ */
   public static get(): Config {
     if (Config.instance == undefined) {
       Config.instance = new Config();
