@@ -41,7 +41,7 @@ export default class App {
    */
   public async startServer() {
 
-    await run(true)
+    await run(false)
 
     // AttemptDataSource.initialize()
 

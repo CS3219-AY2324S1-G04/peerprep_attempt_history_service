@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, PrimaryColumn, CreateDateColumn, Index, UpdateDateColumn, Generated } from 'typeorm';
 
-@Entity({name : 'AttemptEntity'})
+@Entity({name : 'attempt_entity'})
 export class AttemptEntity {
   
   @Column({ name: 'attempt_id' })
@@ -15,7 +15,6 @@ export class AttemptEntity {
 
   @Column({ name: 'question_id', nullable: false  })
   public questionId?: string;
-
 
   @Column({ name: 'language', nullable: false  })
   public language?: string;

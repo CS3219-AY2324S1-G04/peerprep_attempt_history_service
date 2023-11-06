@@ -3,28 +3,37 @@ import { verifyJwt } from '../helper/helper';
 import { AttemptDataSource } from '../database/database';
 import { AttemptEntity } from '../database/attemptEntity';
 import Config from '../dataStructs/config';
-import { resourceUsage } from 'process';
 
 const router = express.Router();
 const config = Config.get()
 
-router.get('/' //, verifyJwt
+/**
+ * Gets user's attempt history (paginated)
+ * 
+ * Parameters:
+ * - uid
+ * - limit
+ * - offset
+ * 
+ * 200 + data : success
+ * 401 : Cannot verify JWT
+ * 500 : Server error
+ */
+router.get('/', verifyJwt
                         , async (req, res) => {
 
-    const uid = 1 //res.locals['user-id'];
+    const uid = res.locals['user-id'];
 
-    const limit : number = req.query.limit !== undefined ? Number(req.query.limit as string) : 10;
+    const limit : number = req.query.limit !== undefined ? Number(req.query.limit as string) : 5;
     const offset: number = req.query.offset !== undefined ? Number(req.query.offset as string) : 0;
 
     try {
         const result = await AttemptDataSource.getRepository(AttemptEntity)
             .createQueryBuilder('user')
-            .select(['user.attemptId', 'user.question_id', 'user.language', 'user.code', 'user.attempt_date'])
-            .where(`user.user_id = :id`, { id: Number(uid)})
+            .select(['user.attemptId', 'user.roomId', 'user.questionId', 'user.language', 'user.date'])
+            .where(`user.userId = :id`, { id: Number(uid)})
             .orderBy(`user.date`, "DESC")
             .limit(limit).offset(offset).getMany();
-    
-        console.log(result)
     
         res.status(200).send({message : 'success', data: result});
     } catch (error) {
@@ -34,53 +43,122 @@ router.get('/' //, verifyJwt
 
 })
 
-router.get('/sample' //, verifyJwt
-                , async (req, res) => { 
+/**
+ * Puts sample data based on the given parameters
+ * 
+ * Parameters:
+ * - question
+ * - room
+ * - language
+ * 
+ * Body:
+ * - The code itself
+ * 
+ * Example:
+ * GET /attempt-service/manual?user=1&question=100&room=200&language=python3
+ * Body: lorem ipsum
+ * 
+ * 200 + data : success
+ * 401 : Cannot verify JWT
+ * 500 : Server error
+ */
+router.post('/', verifyJwt, async (req, res) => { 
 
-    const uid = 1//res.locals['user-id'];
-    const quid = '2'
-    const rid = '5'
-    const language = 'python3'
-    const code = 'lorem ipsum111' 
+    const uid = res.locals['user-id'];
+    const quid = req.query.question
+    const rid = req.query.room
+    const language = req.query.language
+    const code = req.body
 
-    const query = await AttemptDataSource.createQueryBuilder()
-        .insert().into(AttemptEntity)
-        .values({
-            userId : uid,
-            questionId : quid,
-            roomId : rid,
-            language : language,
-            code: code,
-            // date: new Date(Date.now())
-        }).orUpdate(
-            ['code', 'attempt_date'],
-            ['user_id', 'room_id']
-        ).execute();
+    try {
+        await AttemptDataSource.createQueryBuilder()
+            .insert().into(AttemptEntity)
+            .values({
+                userId : uid,
+                questionId : quid,
+                roomId : rid,
+                language : language,
+                code: code,
+                // date: new Date(Date.now())
+            }).orUpdate(
+                ['code', 'attempt_date'],
+                ['user_id', 'room_id']
+            ).execute();
+        res.status(200).json({message : 'Success'})
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({message : 'Unable to process at this time.'})
+    }
 
-    res.status(200).json({message : 'Done'})
-
-    // const result = await AttemptDataSource.getRepository(AttemptEntity).save()
 })
 
+/**
+ * Puts sample data based on the given parameters
+ * 
+ * Parameters:
+ * - user
+ * Note: User needs to be an integer
+ * - question
+ * - room
+ * - language
+ * 
+ * Body:
+ * - The code itself
+ * 
+ * Example:
+ * GET /attempt-service/manual?user=1&question=100&room=200&language=python3
+ * Body: lorem ipsum
+ * 
+ * 200 + data : success
+ * 500 : Server error
+ */
+router.get('/manual', async (req, res) => { 
 
-router.get('/:aid' //, verifyJwt
-                        , async (req, res) => {
+    const uid = Number(req.query.user) || '0';
+    const quid = req.query.question || '1234'
+    const rid = req.query.room || '54321'
+    const language = req.query.language || 'python3' 
+    const code = req.body || 'Lorem Ipsum'
 
-    const uid = 1 //res.locals['user-id'];
-    req.params.aid
+    try {
+        await AttemptDataSource.createQueryBuilder()
+            .insert().into(AttemptEntity)
+            .values({
+                userId : uid,
+                questionId : quid,
+                roomId : rid,
+                language : language,
+                code: code,
+                // date: new Date(Date.now())
+            }).orUpdate(
+                ['code', 'attempt_date'],
+                ['user_id', 'room_id']
+            ).execute();
+        res.status(200).json({message : 'Success'})
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({message : 'Unable to process at this time.'})
+    }
 
-    const limit : number = req.query.limit !== undefined ? Number(req.query.limit as string) : 10;
-    const offset: number = req.query.offset !== undefined ? Number(req.query.offset as string) : 0;
+})
 
+/**
+ * Gets the user's attempt specified by attempt id.
+ * 200 + data : success
+ * 200 + null : successful but result is null
+ * 401 : Cannot verify JWT
+ * 500 : Server error
+ */
+router.get('/:aid', verifyJwt, async (req, res) => {
+
+    const uid = res.locals['user-id'];
+    
     try {
         const result = await AttemptDataSource.getRepository(AttemptEntity)
             .createQueryBuilder('user')
-            .select(['user.attemptId', 'user.question_id', 'user.language', 'user.code', 'user.attempt_date'])
-            .where(`user.user_id = :id`, { id: Number(uid)})
-            .orderBy(`user.date`, "DESC")
-            .limit(limit).offset(offset).getMany();
-    
-        console.log(result)
+            .select(['user.code'])
+            .where(`user.userId = :id`, { id: Number(uid)})
+            .andWhere(`user.attemptId = :aid`, { aid: req.params.aid}).getOne()
     
         res.status(200).send({message : 'success', data: result});
     } catch (error) {
@@ -89,7 +167,5 @@ router.get('/:aid' //, verifyJwt
     }
 
 })
-
-
 
 export default router;

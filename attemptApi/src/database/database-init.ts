@@ -1,7 +1,7 @@
 import { AttemptEntity } from './attemptEntity';
 import { AttemptDataSource } from './database';
 
-export async function run(forceDelete : boolean = false) {
+export async function run(forceDelete: boolean = false) {
   await AttemptDataSource.initialize();
   if (await doEntityExist()) {
     console.log('Initializing or Recreating tables ... ');
@@ -27,10 +27,12 @@ async function doEntityExist() {
 }
 
 async function deleteTable() {
-  console.log('deleting table...')
-  const tname: string = AttemptDataSource.getRepository(AttemptEntity).metadata.tableName
+  console.log('deleting table...');
+  const tname: string =
+    AttemptDataSource.getRepository(AttemptEntity).metadata.tableName;
+
+  console.log(tname);
 
   // await AttemptDataSource.
-  await AttemptDataSource.query(
-    `DROP TABLE IF EXISTS ${tname}`,);
+  await AttemptDataSource.query(`DROP TABLE IF EXISTS ${tname}`);
 }
