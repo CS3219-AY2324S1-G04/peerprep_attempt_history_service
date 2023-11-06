@@ -8,6 +8,8 @@ import cors from 'cors'
 import history from './routes/history'
 
 import Config from './dataStructs/config';
+import { AttemptDataSource } from './database/database';
+import { run } from './database/database-init';
 
 /**
  * This is the server which the front end will talk to.
@@ -37,7 +39,12 @@ export default class App {
   /**
    * Starts listening and activates ttl.
    */
-  public startServer(): void {
+  public async startServer() {
+
+    await run(true)
+
+    // AttemptDataSource.initialize()
+
     this.app.listen(this.port, () => {
       console.log(`Room Service is running on port ${this.port}`);
     });
@@ -53,7 +60,7 @@ export default class App {
   }
 
   private routes(): void {
-    this.app.use('/attempt-service/', history)
+    this.app.use('/attempt-service', history)
   }
 
   private enableDevFeatures(): void {
