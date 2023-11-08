@@ -17,13 +17,21 @@ const config = Config.get();
 export async function verifyJwt(req: Request, res: Response, next: NextFunction) {
   // No Token case
   if (!req.cookies['access-token']) {
-    res.status(401).send({
+    res.status(401).json({
       message: "No access-token",
     })
   } else {
     // No Pub key case (shouldn't hit here but not impossible)
     if (process.env.JwtKey == undefined) {
-      await getJWTKey();
+      try {
+        await getJWTKey();
+      } catch (error) {
+        res.status(500).json({
+          message: "Unable to process request at this time",
+        })
+        return
+      }
+      
     }
     
     const PUBLIC_KEY = process.env.JwtKey || '';
@@ -65,7 +73,6 @@ export async function getJWTKey() {
     const keyCall = await axios.get(url);
     process.env.JwtKey = keyCall.data
   } catch (error) {
-    console.error(error)
     if (axios.isAxiosError(error) && error.response) {
       if (error.status == 404) {
         throw new Error("Unable to reach user service or resource turned 404.")

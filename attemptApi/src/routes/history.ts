@@ -106,19 +106,20 @@ router.post('/', verifyJwt, async (req, res) => {
  * - The code itself
  * 
  * Example:
- * GET /attempt-service/manual?user=1&question=100&room=200&language=python3
- * Body: lorem ipsum
+ * GET /attempt-service/add?user=1&question=100&room=200&language=python3
+ * Body json: { data : 'lorem ipsum' }
  * 
  * 200 + data : success
  * 500 : Server error
  */
-router.get('/manual', async (req, res) => { 
+router.get('/add', async (req, res) => { 
 
     const uid = Number(req.query.user) || '0';
     const quid = req.query.question || '1234'
     const rid = req.query.room || '54321'
     const language = req.query.language || 'python3' 
     const code = req.body || 'Lorem Ipsum'
+    console.log(req.body)
 
     try {
         await AttemptDataSource.createQueryBuilder()
@@ -141,6 +142,33 @@ router.get('/manual', async (req, res) => {
     }
 
 })
+
+/**
+ * Count the number of attempts by users and rank them by user-id 
+ * 
+ * 
+ * 200 + data : success
+ * 500 : Server error
+ */
+router.get('/all', async (req, res) => {
+    try {
+        const result = await AttemptDataSource.getRepository(AttemptEntity)
+            .createQueryBuilder('user')
+            .select('user.userId', 'user-id')
+            .addSelect('COUNT(*)', 'attempt_count')
+            .groupBy('user.user_id')
+            .orderBy('attempt_count', 'DESC')
+            .addOrderBy('user.userId', 'ASC')
+            .getRawMany();
+    
+        res.status(200).send({message : 'success', data: result});
+    } catch (error) {
+        console.error(error)
+        res.status(500).send({message: 'Unable to process request at this time.'})
+    }
+
+})
+
 
 /**
  * Gets the user's attempt specified by attempt id.
