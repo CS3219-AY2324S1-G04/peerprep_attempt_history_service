@@ -4,6 +4,7 @@ attempt_service_image_name='peerprep_attempt_service_api'
 # room_service_mongo_init='peerprep_room_service_mongo_init'
 
 cd ./attemptApi
+npm install
 npm run build 
 
 if [ $? -eq 0 ]; then
