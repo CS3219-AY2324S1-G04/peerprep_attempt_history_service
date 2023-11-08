@@ -51,7 +51,7 @@ export default class Config {
 
     this.isDevEnv = env[Config.appModeEnvVar] === 'development';
 
-    if (!localDev) {
+    if (localDev) {
       this.dbHost = 'localhost';
       this.dbPort = 5432;
       this.dbUser = 'postgres'

@@ -1,18 +1,42 @@
 version: "3"
 services:
-  peerprep_history_service_database:
-    container_name: peerprep_history_service_database
+  peerprep_attempt_service_database:
+    container_name: peerprep_attempt_service_database
     image: postgres:16-bookworm
     environment:
       POSTGRES_USER: ${HS_DB_USER}
       POSTGRES_PASSWORD: ${HS_DB_PASS}
       POSTGRES_DB: ${HS_DB}
-    
-    ports: 
-      - 5432:5432
 
     restart: unless-stopped
     
+    networks:
+      - peerprep
+  
+  peerprep_attempt_service_api:
+    container_name: peerprep_attempt_service_api
+    depends_on:
+      - peerprep_attempt_service_database
+    image: peerprep_attempt_service_api
+    build: ./attemptApi
+    restart: unless-stopped
+    environment:
+      HS_EXPRESS_PORT : ${HS_EXPRESS_PORT}
+      NODE_ENV : ${NODE_ENV}
+
+      HS_DB_HOST : peerprep_attempt_service_database
+      HS_DB_PORT: ${HS_DB_PORT}
+      HS_DB_USER: ${HS_DB_USER}
+      HS_DB_PASS: ${HS_DB_PASS}
+      HS_DB: ${HS_DB}
+      DATABASE_CONNECTION_TIMEOUT_MILLIS : ${DATABASE_CONNECTION_TIMEOUT_MILLIS}
+      DATABASE_MAX_CLIENT_COUNT : ${DATABASE_MAX_CLIENT_COUNT}
+
+      SERVICE_USER_HOST: user_service_api
+      SERVICE_USER_PORT: ${SERVICE_USER_PORT}
+    ports:
+       - ${HS_EXPRESS_PORT}:${HS_EXPRESS_PORT}
+
     networks:
       - peerprep
 

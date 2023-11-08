@@ -30,7 +30,7 @@ router.get('/', verifyJwt
     try {
         const result = await AttemptDataSource.getRepository(AttemptEntity)
             .createQueryBuilder('user')
-            .select(['user.attemptId', 'user.roomId', 'user.questionId', 'user.language', 'user.date'])
+            .select(['user.attemptId', 'user.questionId', 'user.language', 'user.date'])
             .where(`user.userId = :id`, { id: Number(uid)})
             .orderBy(`user.date`, "DESC")
             .limit(limit).offset(offset).getMany();
