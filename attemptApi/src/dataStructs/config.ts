@@ -58,7 +58,7 @@ export default class Config {
       this.dbPass = 'password'
       this.dbDB = 'user'
 
-      this.expressPort = 9010;
+      this.expressPort = 9006;
 
       const userServiceHost = 'localhost';
       const userServicePort = 9000;
