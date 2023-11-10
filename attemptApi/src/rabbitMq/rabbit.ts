@@ -23,7 +23,7 @@ async function consumerClassExample(): Promise<void> {
     // "xxx-service-room-event-queue".
     // By specifying a queue name, you can connect back to the queue and resume
     // from where you left off should a disconnect from the MQ occur.
-    queueName: 'editor-service-room-event-queue',
+    queueName: 'attempt-history-service-room-event-queue',
   });
 
   // Ensures setup is complete
