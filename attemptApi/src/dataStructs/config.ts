@@ -1,25 +1,30 @@
 /**
- * @file Defines {@link Config}.
+ * @file Defines {@link Configuration}.
  */
 
 /** Represents the app's configs. */
-export default class Config {
+export default class Configuration {
   // Variable names that are found in environment
-  private static readonly envVarDatabaseHost: string = 'HS_DB_HOST';
-  private static readonly envVarDatabasePort: string = 'HS_DB_PORT'
-  private static readonly envVarDatabaseUser: string = 'HS_DB_USER';
-  private static readonly envVarDatabasePass: string = 'HS_DB_PASS';
-  private static readonly envVarDatabaseDB: string = 'HS_DB';
+  private static readonly _envDatabaseHost: string = 'HS_DB_HOST';
+  private static readonly _envDatabasePort: string = 'HS_DB_PORT';
+  private static readonly _envDatabaseUser: string = 'HS_DB_USER';
+  private static readonly _envDatabasePass: string = 'HS_DB_PASS';
+  private static readonly _envDatabaseDB: string = 'HS_DB';
 
-  private static readonly envVarDatabaseTimeout: string = 'DATABASE_CONNECTION_TIMEOUT_MILLIS';
-  private static readonly envVarDatabasePool: string = 'DATABASE_MAX_CLIENT_COUNT';
+  private static readonly _envVarDatabaseTimeout: string =
+    'DATABASE_CONNECTION_TIMEOUT_MILLIS';
+  private static readonly _envVarDatabasePool: string =
+    'DATABASE_MAX_CLIENT_COUNT';
 
-  private static readonly envVarExpressPort: string = 'HS_EXPRESS_PORT';
-  private static readonly appModeEnvVar: string = 'NODE_ENV';
+  private static readonly _envVarExpressPort: string = 'HS_EXPRESS_PORT';
+  private static readonly _appModeEnvVar: string = 'NODE_ENV';
 
   // Talk to US if user tries retrieve stats
-  private static readonly envUserServiceHost: string = 'SERVICE_USER_HOST';
-  private static readonly envUserServicePort: string = 'SERVICE_USER_PORT';
+  private static readonly _envUserServiceHost: string = 'SERVICE_USER_HOST';
+  private static readonly _envUserServicePort: string = 'SERVICE_USER_PORT';
+
+  /** Other variables. */
+  private static _instance: Configuration;
 
   /** Copies from Environment and save into these variable names. */
   public readonly dbHost: string;
@@ -34,29 +39,28 @@ export default class Config {
 
   public readonly userServiceURL: string;
 
-  /** Copies from Development variables */
+  /** Copies from Development variables. */
   public readonly isDevEnv: boolean;
-
-  /** Other variables */
-  private static instance: Config;
 
   /**
    * Constructs a Config and assigns to each field, the value stored in their
    * corresponding environment variable. If an environment variable does not
    * have a valid value, assigns a default value instead.
-   *
    * @param env - Environment variables.
+   * @param localDev
    */
-  private constructor(env: NodeJS.ProcessEnv = process.env, localDev: boolean = false) {
-
-    this.isDevEnv = env[Config.appModeEnvVar] === 'development';
+  private constructor(
+    env: NodeJS.ProcessEnv = process.env,
+    localDev: boolean = false,
+  ) {
+    this.isDevEnv = env[Configuration._appModeEnvVar] === 'development';
 
     if (localDev) {
       this.dbHost = 'localhost';
       this.dbPort = 5432;
-      this.dbUser = 'postgres'
-      this.dbPass = 'password'
-      this.dbDB = 'user'
+      this.dbUser = 'postgres';
+      this.dbPass = 'password';
+      this.dbDB = 'user';
 
       this.expressPort = 9006;
 
@@ -66,79 +70,85 @@ export default class Config {
 
       this.dbTimeout = 0;
       this.dbPool = 20;
-
     } else {
-      this.dbHost = this.getEnvAsString(env, Config.envVarDatabaseHost)
-      this.dbPort = this.getEnvAsInt(env, Config.envVarDatabasePort);
-      this.dbUser = this.getEnvAsString(env, Config.envVarDatabaseUser)
-      this.dbPass = this.getEnvAsString(env, Config.envVarDatabasePass)
-      this.dbDB = this.getEnvAsString(env, Config.envVarDatabaseDB)
+      this.dbHost = this._getEnvAsString(env, Configuration._envDatabaseHost);
+      this.dbPort = this._getEnvAsInt(env, Configuration._envDatabasePort);
+      this.dbUser = this._getEnvAsString(env, Configuration._envDatabaseUser);
+      this.dbPass = this._getEnvAsString(env, Configuration._envDatabasePass);
+      this.dbDB = this._getEnvAsString(env, Configuration._envDatabaseDB);
 
-      this.expressPort = this.getEnvAsInt(env, Config.envVarExpressPort);
+      this.expressPort = this._getEnvAsInt(
+        env,
+        Configuration._envVarExpressPort,
+      );
 
-      const userServiceHost = this.getEnvAsString(env, Config.envUserServiceHost);
-      const userServicePort = this.getEnvAsInt(env, Config.envUserServicePort);
+      const userServiceHost = this._getEnvAsString(
+        env,
+        Configuration._envUserServiceHost,
+      );
+      const userServicePort = this._getEnvAsInt(
+        env,
+        Configuration._envUserServicePort,
+      );
       this.userServiceURL = `http://${userServiceHost}:${userServicePort}`;
 
-      this.dbTimeout = this.getEnvAsInt(env, Config.envVarDatabaseTimeout);
-      this.dbPool = this.getEnvAsInt(env, Config.envVarDatabasePool);
-
+      this.dbTimeout = this._getEnvAsInt(
+        env,
+        Configuration._envVarDatabaseTimeout,
+      );
+      this.dbPool = this._getEnvAsInt(env, Configuration._envVarDatabasePool);
     }
   }
 
   /**
- * Instantiates config if not yet done, else returns the config. 
- * 
- * @returns The current running configuration
- */
-  public static get(): Config {
-    if (Config.instance == undefined) {
-      Config.instance = new Config();
+   * Instantiates config if not yet done, else returns the config.
+   * @returns The current running configuration.
+   */
+  public static get(): Configuration {
+    if (Configuration._instance == undefined) {
+      Configuration._instance = new Configuration();
     }
-    return Config.instance;
+    return Configuration._instance;
   }
 
   /**
    * Retrieves the string value of key from Environments.
-   * 
-   * @param env NodeJS.ProcessEnv
-   * @param key The environment variable name
-   * @returns The string value of the variable
-   * @throws Error if unable to process the key
+   * @param env - NodeJS.ProcessEnv.
+   * @param key - The environment variable name.
+   * @returns The string value of the variable.
+   * @throws Error if unable to process the key.
    */
-  private getEnvAsString(env: NodeJS.ProcessEnv, key: any): string {
+  private _getEnvAsString(env: NodeJS.ProcessEnv, key: string): string {
     if (env[key] !== undefined) {
-      const ret = this._parseString(env[key])
+      const ret = this._parseString(env[key]);
       if (ret !== undefined) {
-        return ret
+        return ret;
       }
     }
-    throw Error(`${key} is not set in env or is not a string.`)
+    throw Error(`${key} is not set in env or is not a string.`);
   }
 
   /**
- * Retrieves the int value of key from Environments.
- * 
- * @param env NodeJS.ProcessEnv
- * @param key The environment variable name
- * @returns The int value of the variable
- * @throws Error if unable to process the key
- */
-  private getEnvAsInt(env: NodeJS.ProcessEnv, key: any): number {
+   * Retrieves the int value of key from Environments.
+   * @param env - NodeJS.ProcessEnv.
+   * @param key - The environment variable name.
+   * @returns The int value of the variable.
+   * @throws Error if unable to process the key.
+   */
+  private _getEnvAsInt(env: NodeJS.ProcessEnv, key: string): number {
     if (env[key] !== undefined) {
-      const ret = this._parseInt(env[key])
+      const ret = this._parseInt(env[key]);
       if (ret !== undefined) {
-        return ret
+        return ret;
       }
     }
-    throw Error(`${key} is not set in env or is not a string.`)
+    throw Error(`${key} is not set in env or is not a string.`);
   }
 
   /**
    * Returns undefined if string is empty or undefined.
-   *
-   * @param raw - The string to be parsed
-   * @returns The string or undefined
+   * @param raw - The string to be parsed.
+   * @returns The string or undefined.
    */
   private _parseString(raw: string | undefined): string | undefined {
     if (raw === undefined || raw === '') {
@@ -149,9 +159,8 @@ export default class Config {
 
   /**
    * Returns undefined if Integer is not a number or undefined.
-   *
-   * @param raw - The string to be parsed
-   * @returns The string or undefined
+   * @param raw - The string to be parsed.
+   * @returns The string or undefined.
    */
   private _parseInt(raw: string | undefined): number | undefined {
     if (raw === undefined) {

@@ -1,5 +1,9 @@
-import { Entity, PrimaryGeneratedColumn, Column, PrimaryColumn, CreateDateColumn, Index, UpdateDateColumn, Generated } from 'typeorm';
+/**
+ * @file Entity for TypeORM. Entity is a class that maps to a database table.
+ */
+import { Entity, Column, PrimaryColumn, Index, UpdateDateColumn, Generated } from 'typeorm';
 
+// eslint-disable-next-line prettier/prettier
 @Entity({name : 'attempt_entity'})
 export class AttemptEntity {
   

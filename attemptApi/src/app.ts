@@ -1,15 +1,15 @@
 /**
- * @file Defines {@link App}
+ * @file Defines {@link App}.
  */
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
+import cors from 'cors';
 import express, { Request, Response } from 'express';
-import cors from 'cors'
-import history from './routes/history'
 
-import Config from './dataStructs/config';
-import { AttemptDataSource } from './database/database';
+import Configuration from './dataStructs/config';
+import { attemptDataSource } from './database/database';
 import { run } from './database/database-init';
+import history from './routes/history';
 
 /**
  * This is the server which the front end will talk to.
@@ -20,11 +20,10 @@ export default class App {
   private port: number;
 
   constructor() {
-    const config = Config.get();
+    const config = Configuration.get();
 
     this.app = express();
     this.port = config.expressPort;
-
 
     this.middleMan(config);
     this.routes();
@@ -40,8 +39,7 @@ export default class App {
    * Starts listening and activates ttl.
    */
   public async startServer() {
-
-    await run(false)
+    await run(false);
 
     // AttemptDataSource.initialize()
 
@@ -50,7 +48,7 @@ export default class App {
     });
   }
 
-  private middleMan(config: Config): void {
+  private middleMan(config: Configuration): void {
     this.app.use(bodyParser.json());
     this.app.use(cookieParser());
 
@@ -60,7 +58,7 @@ export default class App {
   }
 
   private routes(): void {
-    this.app.use('/attempt-service', history)
+    this.app.use('/attempt-service', history);
   }
 
   private enableDevFeatures(): void {
@@ -71,5 +69,4 @@ export default class App {
       }),
     );
   }
-
 }

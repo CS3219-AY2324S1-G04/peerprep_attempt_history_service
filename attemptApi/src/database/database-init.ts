@@ -1,38 +1,51 @@
+/**
+ * @file Initializes Database.
+ */
 import { AttemptEntity } from './attemptEntity';
-import { AttemptDataSource } from './database';
+import { attemptDataSource } from './database';
 
+/**
+ * Runs the initialization script for database initialization.
+ * @param forceDelete - Boolean to force deletion of tables.
+ */
 export async function run(forceDelete: boolean = false) {
-  await AttemptDataSource.initialize();
+  await attemptDataSource.initialize();
   if (await doEntityExist()) {
     console.log('Initializing or Recreating tables ... ');
     if (forceDelete) {
       await deleteTable();
     }
-    await AttemptDataSource.synchronize();
+    await attemptDataSource.synchronize();
   } else {
     console.log('Table is already initialized ');
-    await AttemptDataSource.synchronize();
+    await attemptDataSource.synchronize();
   }
 }
 
-async function doEntityExist() {
+/**
+ * Returns True if table exists.
+ * @returns True if table exists.
+ */
+async function doEntityExist(): Promise<boolean> {
   return (
     (
-      await AttemptDataSource.query(
+      await attemptDataSource.query(
         'SELECT 1 FROM information_schema.tables WHERE table_name IN ($1)',
-        [AttemptDataSource.getRepository(AttemptEntity).metadata.tableName],
+        [attemptDataSource.getRepository(AttemptEntity).metadata.tableName],
       )
     ).length > 0
   );
 }
 
-async function deleteTable() {
+/**
+ * Deletes the table in order to allow synchronization.
+ * WARNING: This removes all data stored in the table.
+ */
+async function deleteTable(): Promise<void> {
   console.log('deleting table...');
-  const tname: string =
-    AttemptDataSource.getRepository(AttemptEntity).metadata.tableName;
-
-  console.log(tname);
+  const tableName: string =
+    attemptDataSource.getRepository(AttemptEntity).metadata.tableName;
 
   // await AttemptDataSource.
-  await AttemptDataSource.query(`DROP TABLE IF EXISTS ${tname}`);
+  await attemptDataSource.query(`DROP TABLE IF EXISTS ${tableName}`);
 }
