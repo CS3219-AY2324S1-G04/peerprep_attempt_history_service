@@ -70,7 +70,7 @@ services:
       context: .
       dockerfile: ./dockerfiles/rabbit.dockerfile
     depends_on:
-      - attempt_history_service_database
+      - attempt_history_service_api
     image: ghcr.io/cs3219-ay2324s1-g04/peerprep_attempt_history_service_rabbit
     restart: unless-stopped
     environment:
