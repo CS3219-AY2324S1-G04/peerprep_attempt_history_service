@@ -8,7 +8,8 @@ import express, { Request, Response } from 'express';
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 import Config from './dataStructs/config';
-import { run } from './jobs/database_init/database-init';
+// eslint-disable-next-line @typescript-eslint/naming-convention
+import { attemptDataSource } from './database/database';
 import history from './routes/history';
 
 /**
@@ -42,9 +43,7 @@ export default class App {
    * Starts listening and activates ttl.
    */
   public async startServer() {
-    await run(false);
-
-    // AttemptDataSource.initialize()
+    attemptDataSource.initialize();
 
     this._app.listen(this._port, () => {
       console.log(`Room Service is running on port ${this._port}`);

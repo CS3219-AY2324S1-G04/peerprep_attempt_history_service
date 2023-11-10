@@ -2,7 +2,7 @@
  * @file For RabbitMQ access.
  */
 // eslint-disable-next-line @typescript-eslint/naming-convention
-import Config from '../dataStructs/config';
+import Config from './config';
 // eslint-disable-next-line @typescript-eslint/naming-convention
 import RoomServiceMqConsumer, { RoomEvent } from './room_service_mq_consumer';
 

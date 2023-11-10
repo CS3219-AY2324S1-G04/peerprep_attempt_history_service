@@ -24,6 +24,15 @@ export default class Config {
   private static readonly _envUserServiceHost: string = 'SERVICE_USER_HOST';
   private static readonly _envUserServicePort: string = 'SERVICE_USER_PORT';
 
+  private static readonly _envRoomMQPass: string = 'SERVICE_ROOM_MQ_PASS';
+  private static readonly _envRoomMQUser: string = 'SERVICE_ROOM_MQ_USER';
+  private static readonly _envRoomMQHost: string = 'SERVICE_ROOM_MQ_HOST';
+  private static readonly _envRoomMQPort: string = 'SERVICE_ROOM_MQ_PORT';
+  private static readonly _envRoomMQVhost: string = 'SERVICE_ROOM_MQ_VHOST';
+  private static readonly _envRoomMQTls: string = 'SERVICE_ROOM_MQ_TLS';
+  private static readonly _envRoomMQXchange: string = 'SERVICE_ROOM_MQ_XCHANGE';
+  private static readonly _envRoomMQQname: string = 'SERVICE_ROOM_MQ_QNAME';
+
   /** Other variables. */
   private static _instance: Config;
 
@@ -40,6 +49,15 @@ export default class Config {
   public readonly expressPort: number;
 
   public readonly userServiceURL: string;
+
+  public readonly roomMQPass: string;
+  public readonly roomMQUser: string;
+  public readonly roomMQHost: string;
+  public readonly roomMQPort: number;
+  public readonly roomMQVhost: string;
+  public readonly roomMQTls: boolean;
+  public readonly roomMQXchange: string;
+  public readonly roomMQQname: string;
 
   /** Copies from Development variables. */
   public readonly isDevEnv: boolean;
@@ -73,6 +91,15 @@ export default class Config {
       this.dbTimeout = 0;
       this.dbPool = 20;
       this.dbTls = false;
+
+      this.roomMQPass = 'P@ssword123';
+      this.roomMQUser = 'user';
+      this.roomMQHost = 'localhost';
+      this.roomMQPort = 5432;
+      this.roomMQVhost = '';
+      this.roomMQTls = false;
+      this.roomMQXchange = 'room-events';
+      this.roomMQQname = 'attempt-history-service-room-event-queue';
     } else {
       this.dbHost = this._getEnvAsString(env, Config._envDatabaseHost);
       this.dbPort = this._getEnvAsInt(env, Config._envDatabasePort);
@@ -96,6 +123,16 @@ export default class Config {
       this.dbPool = this._getEnvAsInt(env, Config._envVarDatabasePool);
 
       this.dbTls = this._getEnvAsString(env, Config._envDatabaseTls) === 'true';
+
+      this.roomMQPass = this._getEnvAsString(env, Config._envRoomMQPass);
+      this.roomMQUser = this._getEnvAsString(env, Config._envRoomMQUser);
+      this.roomMQHost = this._getEnvAsString(env, Config._envRoomMQHost);
+      this.roomMQPort = this._getEnvAsInt(env, Config._envRoomMQPort);
+      this.roomMQVhost = this._getEnvAsString(env, Config._envRoomMQVhost);
+      this.roomMQTls =
+        this._getEnvAsString(env, Config._envRoomMQTls) === 'true';
+      this.roomMQXchange = this._getEnvAsString(env, Config._envRoomMQXchange);
+      this.roomMQQname = this._getEnvAsString(env, Config._envRoomMQQname);
     }
   }
 
