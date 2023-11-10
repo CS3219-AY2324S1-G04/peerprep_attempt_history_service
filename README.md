@@ -151,8 +151,8 @@ Note that (user id, room id) is considered primary keys. That is to say, their c
 
 **Examples**
 
-Complexity and Categories provided
 > `attempt-service/add?user=4&question=4&room=fb137075-1ce0-4303-9e47-5182dac23a41&language=cpp`
+
 > body `{ code : 'lorem ipsum' }`
 
 This will create an entry for the user.
