@@ -22,6 +22,9 @@ export async function run(forceDelete: boolean = false) {
     console.log('Table is already initialized ');
     await attemptDataSource.synchronize();
   }
+  await attemptDataSource.destroy().then(() => {
+    console.log('Disconnected');
+  });
 }
 
 /**

@@ -32,10 +32,10 @@ images_database_initialiser_name=${cr}peerprep_attempt_history_database_initiali
 images_database_initialiser_docker_file="./dockerfiles/database_initializer.dockerfile"
 images_database_initialiser_should_build=0
 
-# # Rabbit Consumer image
-# images_rabbit_name=${cr}peerprep_attempt_history_rabbit
-# images_rabbit_docker_file="./dockerfiles/rabbit.dockerfile"
-# images_rabbit_should_build=0
+# Rabbit Consumer image
+images_rabbit_name=${cr}peerprep_attempt_history_rabbit
+images_rabbit_docker_file="./dockerfiles/rabbit.dockerfile"
+images_rabbit_should_build=0
 
 ################################################################################
 #                                                                              #

@@ -116,19 +116,19 @@ router.post('/', verifyJwt, async (req, res) => {
  * - The code itself.
  *
  * Example:
- * GET /attempt-service/add?user=1&question=100&room=200&language=python3
+ * POST /attempt-service/add?user=1&question=100&room=200&language=python3
  * Body json: { data : 'lorem ipsum' }.
  *
  * 200 + data : success
  * 500 : Server error.
  */
-router.get('/add', async (req, res) => {
+router.post('/add', async (req, res) => {
   const uid = Number(req.query.user) || '0';
   const quid = req.query.question || '1234';
   const rid = req.query.room || '54321';
   const language = req.query.language || 'python3';
-  const code = req.body || 'Lorem Ipsum';
-  console.log(req.body);
+  const code = req.body.code || 'Lorem Ipsum';
+  console.log(req.body.code);
 
   try {
     await attemptDataSource

@@ -1,13 +1,18 @@
-import axios, { AxiosError } from 'axios';
-import express, { NextFunction, Request, Response } from 'express';
+/**
+ * @file Helper file for api.
+ */
+import axios from 'axios';
+import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 
+// eslint-disable-next-line @typescript-eslint/naming-convention
 import Config from '../dataStructs/config';
 
 const config = Config.get();
 
 /**
- * Middleman that verifies if user's access-token is legitimate, extracts information from JWT and
+ * Middleman that verifies if user's access-token is legitimate,
+ * extracts information from JWT and
  * save the user-id into response locals as user-id.
  * @param req - The request received.
  * @param res - The response to send.
