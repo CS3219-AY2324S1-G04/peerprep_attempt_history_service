@@ -54,53 +54,53 @@ router.get('/', verifyJwt, async (req, res) => {
   }
 });
 
-/**
- * Puts sample data based on the given parameters.
- *
- * Parameters:
- * - question
- * - room
- * - language.
- *
- * Body:
- * - The code itself.
- *
- * Example:
- * GET /attempt-service/manual?user=1&question=100&room=200&language=python3
- * Body: lorem ipsum.
- *
- * 200 + data : success
- * 401 : Cannot verify JWT
- * 500 : Server error.
- */
-router.post('/', verifyJwt, async (req, res) => {
-  const uid = res.locals['user-id'];
-  const quid = req.query.question;
-  const rid = req.query.room;
-  const language = req.query.language;
-  const code = req.body;
+// /**
+//  * Puts sample data based on the given parameters.
+//  *
+//  * Parameters:
+//  * - question
+//  * - room
+//  * - language.
+//  *
+//  * Body:
+//  * - The code itself.
+//  *
+//  * Example:
+//  * GET /attempt-service/manual?user=1&question=100&room=200&language=python3
+//  * Body: lorem ipsum.
+//  *
+//  * 200 + data : success
+//  * 401 : Cannot verify JWT
+//  * 500 : Server error.
+//  */
+// router.post('/', verifyJwt, async (req, res) => {
+//   const uid = res.locals['user-id'];
+//   const quid = req.query.question;
+//   const rid = req.query.room;
+//   const language = req.query.language;
+//   const code = req.body;
 
-  try {
-    await attemptDataSource
-      .createQueryBuilder()
-      .insert()
-      .into(AttemptEntity)
-      .values({
-        userId: uid,
-        questionId: quid,
-        roomId: rid,
-        language: language,
-        code: code,
-        // date: new Date(Date.now())
-      })
-      .orUpdate(['code', 'attempt_date'], ['user_id', 'room_id'])
-      .execute();
-    res.status(200).json({ message: 'Success' });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: 'Unable to process at this time.' });
-  }
-});
+//   try {
+//     await attemptDataSource
+//       .createQueryBuilder()
+//       .insert()
+//       .into(AttemptEntity)
+//       .values({
+//         userId: uid,
+//         questionId: quid,
+//         roomId: rid,
+//         language: language,
+//         code: code,
+//         // date: new Date(Date.now())
+//       })
+//       .orUpdate(['code', 'attempt_date'], ['user_id', 'room_id'])
+//       .execute();
+//     res.status(200).json({ message: 'Success' });
+//   } catch (error) {
+//     console.log(error);
+//     res.status(500).json({ message: 'Unable to process at this time.' });
+//   }
+// });
 
 /**
  * Puts sample data based on the given parameters.
@@ -119,7 +119,7 @@ router.post('/', verifyJwt, async (req, res) => {
  * POST /attempt-service/add?user=1&question=100&room=200&language=python3
  * Body json: { data : 'lorem ipsum' }.
  *
- * 200 + data : success
+ * 200 : success
  * 500 : Server error.
  */
 router.post('/add', async (req, res) => {

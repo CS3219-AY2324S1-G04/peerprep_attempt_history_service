@@ -24,9 +24,9 @@ services:
       HS_DB_USER: ${HS_DB_USER}
       HS_DB_PASS: ${HS_DB_PASS}
       HS_DB: ${HS_DB}
+      DATABASE_SHOULD_USE_TLS : ${DATABASE_SHOULD_USE_TLS}
       DATABASE_CONNECTION_TIMEOUT_MILLIS : ${DATABASE_CONNECTION_TIMEOUT_MILLIS}
       DATABASE_MAX_CLIENT_COUNT : ${DATABASE_MAX_CLIENT_COUNT}
-      DATABASE_SHOULD_USE_TLS : ${DATABASE_SHOULD_USE_TLS}
       SHOULD_FORCE_INITIALISATION : ${SHOULD_FORCE_INITIALISATION}
     
     restart: on-failure
@@ -52,12 +52,13 @@ services:
       HS_DB_PASS: ${HS_DB_PASS}
       HS_DB: ${HS_DB}
 
+      DATABASE_SHOULD_USE_TLS : ${DATABASE_SHOULD_USE_TLS}
       DATABASE_CONNECTION_TIMEOUT_MILLIS : ${DATABASE_CONNECTION_TIMEOUT_MILLIS}
       DATABASE_MAX_CLIENT_COUNT : ${DATABASE_MAX_CLIENT_COUNT}
-      DATABASE_SHOULD_USE_TLS : ${DATABASE_SHOULD_USE_TLS}
 
       SERVICE_USER_HOST: user_service_api
       SERVICE_USER_PORT: ${SERVICE_USER_PORT}
+      
     ports:
        - ${HS_EXPRESS_PORT}:${HS_EXPRESS_PORT}
 
@@ -73,7 +74,6 @@ services:
     image: ghcr.io/cs3219-ay2324s1-g04/peerprep_attempt_history_service_rabbit
     restart: unless-stopped
     environment:
-      NODE_ENV : ${NODE_ENV}
 
       HS_HOST : attempt_history_service_api
       HS_PORT : ${HS_EXPRESS_PORT}
@@ -87,11 +87,11 @@ services:
       SERVICE_ROOM_MQ_XCHANGE: ${SERVICE_ROOM_MQ_XCHANGE}
       SERVICE_ROOM_MQ_QNAME: ${SERVICE_ROOM_MQ_QNAME}
       
-      SERVICE_EDITOR_HOST: editor_service_api
-      SERVICE_EDITOR_PORT: ${SERVICE_EDITOR_PORT}
-
       SERVICE_USER_HOST: user_service_api
       SERVICE_USER_PORT: ${SERVICE_USER_PORT}
+
+      SERVICE_EDITOR_HOST: editor_service_api
+      SERVICE_EDITOR_PORT: ${SERVICE_EDITOR_PORT}
     
     networks:
       - peerprep
