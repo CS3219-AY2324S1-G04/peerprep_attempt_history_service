@@ -1,7 +1,9 @@
 /**
  * @file Initializes Database.
  */
-import { AttemptEntity } from './attemptEntity';
+import { AttemptEntity } from '../../database/attemptEntity';
+// eslint-disable-next-line @typescript-eslint/naming-convention
+import Config from './config';
 import { attemptDataSource } from './database';
 
 /**
@@ -49,3 +51,6 @@ async function deleteTable(): Promise<void> {
   // await AttemptDataSource.
   await attemptDataSource.query(`DROP TABLE IF EXISTS ${tableName}`);
 }
+
+attemptDataSource.initialize();
+run(Config.get().forceInit);

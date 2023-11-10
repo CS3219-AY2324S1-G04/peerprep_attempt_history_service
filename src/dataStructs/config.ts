@@ -1,15 +1,16 @@
 /**
- * @file Defines {@link Configuration}.
+ * @file Defines {@link Config}.
  */
 
 /** Represents the app's configs. */
-export default class Configuration {
+export default class Config {
   // Variable names that are found in environment
   private static readonly _envDatabaseHost: string = 'HS_DB_HOST';
   private static readonly _envDatabasePort: string = 'HS_DB_PORT';
   private static readonly _envDatabaseUser: string = 'HS_DB_USER';
   private static readonly _envDatabasePass: string = 'HS_DB_PASS';
   private static readonly _envDatabaseDB: string = 'HS_DB';
+  private static readonly _envDatabaseTls: string = 'DATABASE_SHOULD_USE_TLS';
 
   private static readonly _envVarDatabaseTimeout: string =
     'DATABASE_CONNECTION_TIMEOUT_MILLIS';
@@ -23,8 +24,17 @@ export default class Configuration {
   private static readonly _envUserServiceHost: string = 'SERVICE_USER_HOST';
   private static readonly _envUserServicePort: string = 'SERVICE_USER_PORT';
 
+  private static readonly _envRoomMQPass: string = 'SERVICE_ROOM_MQ_PASS';
+  private static readonly _envRoomMQUser: string = 'SERVICE_ROOM_MQ_USER';
+  private static readonly _envRoomMQHost: string = 'SERVICE_ROOM_MQ_HOST';
+  private static readonly _envRoomMQPort: string = 'SERVICE_ROOM_MQ_PORT';
+  private static readonly _envRoomMQVhost: string = 'SERVICE_ROOM_MQ_VHOST';
+  private static readonly _envRoomMQTls: string = 'SERVICE_ROOM_MQ_TLS';
+  private static readonly _envRoomMQXchange: string = 'SERVICE_ROOM_MQ_XCHANGE';
+  private static readonly _envRoomMQQname: string = 'SERVICE_ROOM_MQ_QNAME';
+
   /** Other variables. */
-  private static _instance: Configuration;
+  private static _instance: Config;
 
   /** Copies from Environment and save into these variable names. */
   public readonly dbHost: string;
@@ -34,10 +44,20 @@ export default class Configuration {
   public readonly dbDB: string;
   public readonly dbTimeout: number;
   public readonly dbPool: number;
+  public readonly dbTls: boolean;
 
   public readonly expressPort: number;
 
   public readonly userServiceURL: string;
+
+  public readonly roomMQPass: string;
+  public readonly roomMQUser: string;
+  public readonly roomMQHost: string;
+  public readonly roomMQPort: number;
+  public readonly roomMQVhost: string;
+  public readonly roomMQTls: boolean;
+  public readonly roomMQXchange: string;
+  public readonly roomMQQname: string;
 
   /** Copies from Development variables. */
   public readonly isDevEnv: boolean;
@@ -47,13 +67,13 @@ export default class Configuration {
    * corresponding environment variable. If an environment variable does not
    * have a valid value, assigns a default value instead.
    * @param env - Environment variables.
-   * @param localDev
+   * @param localDev - For development.
    */
   private constructor(
     env: NodeJS.ProcessEnv = process.env,
     localDev: boolean = false,
   ) {
-    this.isDevEnv = env[Configuration._appModeEnvVar] === 'development';
+    this.isDevEnv = env[Config._appModeEnvVar] === 'development';
 
     if (localDev) {
       this.dbHost = 'localhost';
@@ -70,33 +90,49 @@ export default class Configuration {
 
       this.dbTimeout = 0;
       this.dbPool = 20;
-    } else {
-      this.dbHost = this._getEnvAsString(env, Configuration._envDatabaseHost);
-      this.dbPort = this._getEnvAsInt(env, Configuration._envDatabasePort);
-      this.dbUser = this._getEnvAsString(env, Configuration._envDatabaseUser);
-      this.dbPass = this._getEnvAsString(env, Configuration._envDatabasePass);
-      this.dbDB = this._getEnvAsString(env, Configuration._envDatabaseDB);
+      this.dbTls = false;
 
-      this.expressPort = this._getEnvAsInt(
-        env,
-        Configuration._envVarExpressPort,
-      );
+      this.roomMQPass = 'P@ssword123';
+      this.roomMQUser = 'user';
+      this.roomMQHost = 'localhost';
+      this.roomMQPort = 5432;
+      this.roomMQVhost = '';
+      this.roomMQTls = false;
+      this.roomMQXchange = 'room-events';
+      this.roomMQQname = 'attempt-history-service-room-event-queue';
+    } else {
+      this.dbHost = this._getEnvAsString(env, Config._envDatabaseHost);
+      this.dbPort = this._getEnvAsInt(env, Config._envDatabasePort);
+      this.dbUser = this._getEnvAsString(env, Config._envDatabaseUser);
+      this.dbPass = this._getEnvAsString(env, Config._envDatabasePass);
+      this.dbDB = this._getEnvAsString(env, Config._envDatabaseDB);
+
+      this.expressPort = this._getEnvAsInt(env, Config._envVarExpressPort);
 
       const userServiceHost = this._getEnvAsString(
         env,
-        Configuration._envUserServiceHost,
+        Config._envUserServiceHost,
       );
       const userServicePort = this._getEnvAsInt(
         env,
-        Configuration._envUserServicePort,
+        Config._envUserServicePort,
       );
       this.userServiceURL = `http://${userServiceHost}:${userServicePort}`;
 
-      this.dbTimeout = this._getEnvAsInt(
-        env,
-        Configuration._envVarDatabaseTimeout,
-      );
-      this.dbPool = this._getEnvAsInt(env, Configuration._envVarDatabasePool);
+      this.dbTimeout = this._getEnvAsInt(env, Config._envVarDatabaseTimeout);
+      this.dbPool = this._getEnvAsInt(env, Config._envVarDatabasePool);
+
+      this.dbTls = this._getEnvAsString(env, Config._envDatabaseTls) === 'true';
+
+      this.roomMQPass = this._getEnvAsString(env, Config._envRoomMQPass);
+      this.roomMQUser = this._getEnvAsString(env, Config._envRoomMQUser);
+      this.roomMQHost = this._getEnvAsString(env, Config._envRoomMQHost);
+      this.roomMQPort = this._getEnvAsInt(env, Config._envRoomMQPort);
+      this.roomMQVhost = this._getEnvAsString(env, Config._envRoomMQVhost);
+      this.roomMQTls =
+        this._getEnvAsString(env, Config._envRoomMQTls) === 'true';
+      this.roomMQXchange = this._getEnvAsString(env, Config._envRoomMQXchange);
+      this.roomMQQname = this._getEnvAsString(env, Config._envRoomMQQname);
     }
   }
 
@@ -104,11 +140,11 @@ export default class Configuration {
    * Instantiates config if not yet done, else returns the config.
    * @returns The current running configuration.
    */
-  public static get(): Configuration {
-    if (Configuration._instance == undefined) {
-      Configuration._instance = new Configuration();
+  public static get(): Config {
+    if (Config._instance == undefined) {
+      Config._instance = new Config();
     }
-    return Configuration._instance;
+    return Config._instance;
   }
 
   /**

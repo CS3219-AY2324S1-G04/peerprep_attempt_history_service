@@ -2,9 +2,9 @@ import axios, { AxiosError } from 'axios';
 import express, { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 
-import Configuration from '../dataStructs/config';
+import Config from '../dataStructs/config';
 
-const config = Configuration.get();
+const config = Config.get();
 
 /**
  * Middleman that verifies if user's access-token is legitimate, extracts information from JWT and

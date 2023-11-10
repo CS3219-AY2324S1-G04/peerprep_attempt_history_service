@@ -2,8 +2,7 @@
   "root": true,
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    "project": "./tsconfig.json",
-    "tsconfigRootDir": "./attemptApi/"
+    "project": "./tsconfig.json"
   },
   "plugins": ["@typescript-eslint", "prettier"],
   "extends": [

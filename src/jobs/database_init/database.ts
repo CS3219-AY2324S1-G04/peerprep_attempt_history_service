@@ -3,10 +3,11 @@
  */
 import { DataSource } from 'typeorm';
 
-import configuration from '../dataStructs/config';
-import { AttemptEntity } from './attemptEntity';
+import { AttemptEntity } from '../../database/attemptEntity';
+// eslint-disable-next-line @typescript-eslint/naming-convention
+import Config from './config';
 
-const config = configuration.get();
+const config = Config.get();
 
 /**
  * The DataSource to interact with.
@@ -22,6 +23,7 @@ export const attemptDataSource = new DataSource({
   connectTimeoutMS: config.dbTimeout,
   poolSize: config.dbPool,
   synchronize: false,
+  ssl: config.dbTls,
 });
 
 attemptDataSource

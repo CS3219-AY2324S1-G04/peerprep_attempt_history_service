@@ -1,12 +1,13 @@
-import express, { NextFunction, Request, Response } from 'express';
+/**
+ * @file Routes for API.
+ */
+import express from 'express';
 
-import Configuration from '../dataStructs/config';
 import { AttemptEntity } from '../database/attemptEntity';
 import { attemptDataSource } from '../database/database';
 import { verifyJwt } from '../helper/helper';
 
 const router = express.Router();
-const config = Configuration.get();
 
 /**
  * Gets user's attempt history (paginated).

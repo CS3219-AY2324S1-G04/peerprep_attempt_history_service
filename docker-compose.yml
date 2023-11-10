@@ -1,36 +1,59 @@
 version: "3"
 services:
-  peerprep_attempt_service_database:
-    container_name: peerprep_attempt_service_database
+  attempt_history_service_database:
     image: postgres:16-bookworm
     environment:
       POSTGRES_USER: ${HS_DB_USER}
       POSTGRES_PASSWORD: ${HS_DB_PASS}
       POSTGRES_DB: ${HS_DB}
-
     restart: unless-stopped
     
     networks:
       - peerprep
-  
-  peerprep_attempt_service_api:
-    container_name: peerprep_attempt_service_api
-    depends_on:
-      - peerprep_attempt_service_database
-    image: peerprep_attempt_service_api
-    build: ./attemptApi
-    restart: unless-stopped
-    environment:
-      HS_EXPRESS_PORT : ${HS_EXPRESS_PORT}
-      NODE_ENV : ${NODE_ENV}
 
-      HS_DB_HOST : peerprep_attempt_service_database
+  attempt_history_service_database_init:
+    build:
+      context: .
+      dockerfile: ./dockerfiles/database_initializer.dockerfile
+    depends_on:
+      - attempt_history_service_database
+    image: ghcr.io/cs3219-ay2324s1-g04/peerprep_attempt_history_service_database_initialiser
+    environment:
+
+      HS_DB_HOST : attempt_history_service_database
       HS_DB_PORT: ${HS_DB_PORT}
       HS_DB_USER: ${HS_DB_USER}
       HS_DB_PASS: ${HS_DB_PASS}
       HS_DB: ${HS_DB}
       DATABASE_CONNECTION_TIMEOUT_MILLIS : ${DATABASE_CONNECTION_TIMEOUT_MILLIS}
       DATABASE_MAX_CLIENT_COUNT : ${DATABASE_MAX_CLIENT_COUNT}
+      DATABASE_SHOULD_USE_TLS : ${DATABASE_SHOULD_USE_TLS}
+      SHOULD_FORCE_INITIALISATION : ${SHOULD_FORCE_INITIALISATION}
+
+    networks:
+      - peerprep
+
+  attempt_history_service_api:
+    container_name: attempt_history_service_api
+    build:
+      context: .
+      dockerfile: ./dockerfiles/api.dockerfile
+    depends_on:
+      - attempt_history_service_database
+    image: attempt_history_service_api
+    restart: unless-stopped
+    environment:
+      HS_EXPRESS_PORT : ${HS_EXPRESS_PORT}
+      NODE_ENV : ${NODE_ENV}
+
+      HS_DB_HOST : attempt_history_service_database
+      HS_DB_PORT: ${HS_DB_PORT}
+      HS_DB_USER: ${HS_DB_USER}
+      HS_DB_PASS: ${HS_DB_PASS}
+      HS_DB: ${HS_DB}
+      DATABASE_CONNECTION_TIMEOUT_MILLIS : ${DATABASE_CONNECTION_TIMEOUT_MILLIS}
+      DATABASE_MAX_CLIENT_COUNT : ${DATABASE_MAX_CLIENT_COUNT}
+      DATABASE_SHOULD_USE_TLS : ${DATABASE_SHOULD_USE_TLS}
 
       SERVICE_USER_HOST: user_service_api
       SERVICE_USER_PORT: ${SERVICE_USER_PORT}
@@ -39,6 +62,42 @@ services:
 
     networks:
       - peerprep
+
+  # attempt_history_service_rabbit:
+  #   build:
+  #     context: .
+  #     dockerfile: ./dockerfiles/rabbit.dockerfile
+  #   depends_on:
+  #     - attempt_history_service_database
+  #   image: ghcr.io/cs3219-ay2324s1-g04/peerprep_attempt_history_service_rabbit
+  #   restart: unless-stopped
+  #   environment:
+  #     HS_EXPRESS_PORT : ${HS_EXPRESS_PORT}
+  #     NODE_ENV : ${NODE_ENV}
+
+  #     HS_DB_HOST : attempt_history_service_database
+  #     HS_DB_PORT: ${HS_DB_PORT}
+  #     HS_DB_USER: ${HS_DB_USER}
+  #     HS_DB_PASS: ${HS_DB_PASS}
+  #     HS_DB: ${HS_DB}
+  #     DATABASE_CONNECTION_TIMEOUT_MILLIS : ${DATABASE_CONNECTION_TIMEOUT_MILLIS}
+  #     DATABASE_MAX_CLIENT_COUNT : ${DATABASE_MAX_CLIENT_COUNT}
+  # SERVICE_ROOM_MQ_PASS='P@ssword123'
+  # SERVICE_ROOM_MQ_USER='user'
+  # SERVICE_ROOM_MQ_HOST='localhost',
+  # SERVICE_ROOM_MQ_PORT=5672
+  # SERVICE_ROOM_MQ_VHOST=''
+  # SERVICE_ROOM_MQ_TLS=FALSE
+  # SERVICE_ROOM_MQ_XCHANGE='room-events'
+  # SERVICE_ROOM_MQ_QNAME='attempt-history-service-room-event-queue'
+
+  #     SERVICE_USER_HOST: user_service_api
+  #     SERVICE_USER_PORT: ${SERVICE_USER_PORT}
+  #   ports:
+  #      - ${HS_EXPRESS_PORT}:${HS_EXPRESS_PORT}
+
+  #   networks:
+  #     - peerprep
 
 networks:
   peerprep:
