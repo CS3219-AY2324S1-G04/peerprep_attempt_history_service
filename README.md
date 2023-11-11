@@ -4,6 +4,8 @@ Keeps tracks of the user's attempts.
 
 - [PeerPrep Attempt History Service](#peerprep-attempt-history-service)
   - [Quickstart Guide](#quickstart-guide)
+  - [Build Script](#build-script)
+  - [Architecture](#architecture)
   - [Docker Images](#docker-images)
     - [API](#api)
     - [Database Initialiser](#database-initialiser)
@@ -22,6 +24,27 @@ Note that Attempt History Service relies on User Service and Editor Service. Ple
 2. Build the docker images by running: `./build_images.sh`
 3. Modify the ".env" file as per needed. Refer to [Docker Images](#docker-images) for the list of environment variables.
 4. Create the docker containers by running: `docker compose up`
+
+## Build Script
+
+`build_images.sh` is a build script for building the Docker images and optionally pushing them to the container registry. To get more information about the script, run:
+
+```
+./build_images.sh -h
+```
+
+## Architecture
+
+![](./images/architecture.png)
+
+Legend:
+
+- Start of arrow indicates request origin and end of arrow indicates request destination.
+- `#505050` Dark grey items represents internal servers/containers.
+- `#DA4026` Red items represents internal servers/containers that are temporary.
+- `#7FBA42` Green items represents internal servers/containers that are exposed.
+- `#2072B8` Blue items represents external servers/containers.
+
 
 ## Docker Images
 
