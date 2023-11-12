@@ -18,7 +18,7 @@ Keeps tracks of the user's attempts.
 
 ## Quickstart Guide
 
-Note that Attempt History Service relies on User Service and Editor Service. Please ensure that these services are up and running before attempting to start Attempt History Service.
+Note that Attempt History Service relies on User Service and Document Service. Please ensure that these services are up and running before attempting to start Attempt History Service.
 
 1. Clone this repository.
 2. Build the docker images by running: `./build_images.sh`
@@ -107,8 +107,8 @@ Legend:
 - `SERVICE_ROOM_MQ_QNAME` - Name of the MQ queue.
 - `SERVICE_USER_HOST` - Address of the User Service host.
 - `SERVICE_USER_PORT` - Port the User Service.
-- `SERVICE_EDITOR_HOST` - Address of the Editor Service.
-- `SERVICE_EDITOR_PORT` - Port the Editor Service.
+- `SERVICE_DOCUMENT_HOST` - Address of the Document Service.
+- `SERVICE_DOCUMENT_PORT` - Port the Document Service.
 
 ## REST API
 

@@ -45,8 +45,8 @@ export async function consumer(): Promise<void> {
     if (data.eventType == 'delete') {
       const userCode = 'lorem ipsum';
       // try {
-      //   axios.get(config.editorServiceURL +
-      // '/editor-service/editor/e7c2759f-8093-443b-9c6c-6b79c8d93bb0');
+      //   axios.get(config.documentServiceURL +
+      // '/document-service/document/e7c2759f-8093-443b-9c6c-6b79c8d93bb0');
       // }
 
       try {
