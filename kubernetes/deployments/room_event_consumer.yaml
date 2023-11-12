@@ -6,7 +6,6 @@ metadata:
   labels:
     app: attempt-history-service-room-event-consumer
 spec:
-  replicas: 1
   selector:
     matchLabels:
       app: attempt-history-service-room-event-consumer
