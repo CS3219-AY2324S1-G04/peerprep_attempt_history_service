@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: attempt-history-service-room-service-mq-client-config-map
+  namespace: peerprep
+data:
+  service-room-mq-user: lntyztej
+  service-room-mq-host: octopus.rmq3.cloudamqp.com
+  service-room-mq-port: '5671'
+  service-room-mq-vhost: lntyztej
+  service-room-mq-should-use-tls: 'true'
+  service-room-mq-exchange-name: room-events
+  service-room-mq-queue-name: attempt-history-service-room-event-queue

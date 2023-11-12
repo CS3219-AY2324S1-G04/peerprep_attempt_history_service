@@ -1,0 +1,81 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: attempt-history-service-mq-consumer-deployment
+  namespace: peerprep
+  labels:
+    app: attempt-history-service-mq-consumer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: attempt-history-service-mq-consumer
+  template:
+    metadata:
+      namespace: peerprep
+      labels:
+        app: attempt-history-service-mq-consumer
+    spec:
+      containers:
+        - name: attempt-history-service-mq-consumer
+          image: ghcr.io/cs3219-ay2324s1-g04/peerprep_attempt_history_service_mq_consumer
+          env:
+            - name: AHS_HOST
+              value: attempt-history-service-api-service
+            - name: AHS_PORT
+              value: '9006'
+            - name: SERVICE_ROOM_MQ_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: attempt-history-service-room-service-mq-client-config-map
+                  key: service-room-mq-user
+            - name: SERVICE_ROOM_MQ_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: attempt-history-service-room-service-mq-client-secret
+                  key: service-room-mq-password
+            - name: SERVICE_ROOM_MQ_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: attempt-history-service-room-service-mq-client-config-map
+                  key: service-room-mq-host
+            - name: SERVICE_ROOM_MQ_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: attempt-history-service-room-service-mq-client-config-map
+                  key: service-room-mq-port
+            - name: SERVICE_ROOM_MQ_VHOST
+              valueFrom:
+                configMapKeyRef:
+                  name: attempt-history-service-room-service-mq-client-config-map
+                  key: service-room-mq-vhost
+            - name: SERVICE_ROOM_MQ_TLS
+              valueFrom:
+                configMapKeyRef:
+                  name: attempt-history-service-room-service-mq-client-config-map
+                  key: service-room-mq-should-use-tls
+            - name: SERVICE_ROOM_MQ_XCHANGE
+              valueFrom:
+                configMapKeyRef:
+                  name: attempt-history-service-room-service-mq-client-config-map
+                  key: service-room-mq-exchange-name
+            - name: SERVICE_ROOM_MQ_QNAME
+              valueFrom:
+                configMapKeyRef:
+                  name: attempt-history-service-room-service-mq-client-config-map
+                  key: service-room-mq-queue-name
+            - name: SERVICE_USER_HOST
+              value: user-service-api-service
+            - name: SERVICE_USER_PORT
+              value: '9000'
+            - name: SERVICE_DOCUMENT_HOST
+              value: doc-service-api-service
+            - name: SERVICE_DOCUMENT_PORT
+              value: '9007'
+          resources:
+            requests:
+              memory: 128Mi
+              cpu: 100m
+            limits:
+              memory: 256Mi
+              cpu: 500m
