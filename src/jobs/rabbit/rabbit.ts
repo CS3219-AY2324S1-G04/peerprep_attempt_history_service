@@ -42,12 +42,17 @@ export async function consumer(): Promise<void> {
     // case.
     // console.log(`Received: ${JSON.stringify(data)}`);
 
-    if (data.eventType == 'delete') {
-      const userCode = 'lorem ipsum';
-      // try {
-      //   axios.get(config.editorServiceURL +
-      // '/editor-service/editor/e7c2759f-8093-443b-9c6c-6b79c8d93bb0');
-      // }
+    if (data.eventType == 'remove-user') {
+      let userCode = 'lorem ipsum';
+      try {
+        const getCode = await axios.get(
+          config.editorServiceURL + '/docs-service/docs/' + data.room.roomId,
+        );
+        console.log(getCode.data.doc);
+        userCode = getCode.data.doc;
+      } catch (error) {
+        console.error(error);
+      }
 
       try {
         const requestBody = { code: userCode };
@@ -55,17 +60,10 @@ export async function consumer(): Promise<void> {
         const roomId = `room=${data.room.roomId}`;
         const language = `language=${data.room.questionLangSlug}`;
         const userOne =
-          `?user=${data.room.userIds[0]}&${questionId}` +
-          `&${roomId}&${language}`;
-        const userTwo =
-          `?user=${data.room.userIds[1]}&${questionId}` +
+          `?user=${data.removedUserId}&${questionId}` +
           `&${roomId}&${language}`;
         await axios.post(
           config.attemptHistoryURL + '/attempt-service/add' + userOne,
-          requestBody,
-        );
-        await axios.post(
-          config.attemptHistoryURL + '/attempt-service/add' + userTwo,
           requestBody,
         );
       } catch (error) {
