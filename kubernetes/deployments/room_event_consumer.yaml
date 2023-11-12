@@ -1,0 +1,80 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: attempt-history-service-room-event-consumer-deployment
+  namespace: peerprep
+  labels:
+    app: attempt-history-service-room-event-consumer
+spec:
+  selector:
+    matchLabels:
+      app: attempt-history-service-room-event-consumer
+  template:
+    metadata:
+      namespace: peerprep
+      labels:
+        app: attempt-history-service-room-event-consumer
+    spec:
+      containers:
+        - name: attempt-history-service-room-event-consumer
+          image: ghcr.io/cs3219-ay2324s1-g04/peerprep_attempt_history_service_room_event_consumer
+          env:
+            - name: API_HOST
+              value: attempt-history-service-api-service
+            - name: API_PORT
+              value: '9006'
+            - name: ROOM_SERVICE_MQ_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: attempt-history-service-room-service-mq-client-config-map
+                  key: room-service-mq-user
+            - name: ROOM_SERVICE_MQ_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: attempt-history-service-room-service-mq-client-secret
+                  key: room-service-mq-password
+            - name: ROOM_SERVICE_MQ_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: attempt-history-service-room-service-mq-client-config-map
+                  key: room-service-mq-host
+            - name: ROOM_SERVICE_MQ_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: attempt-history-service-room-service-mq-client-config-map
+                  key: room-service-mq-port
+            - name: ROOM_SERVICE_MQ_VHOST
+              valueFrom:
+                configMapKeyRef:
+                  name: attempt-history-service-room-service-mq-client-config-map
+                  key: room-service-mq-vhost
+            - name: ROOM_SERVICE_MQ_SHOULD_USE_TLS
+              valueFrom:
+                configMapKeyRef:
+                  name: attempt-history-service-room-service-mq-client-config-map
+                  key: room-service-mq-should-use-tls
+            - name: ROOM_SERVICE_MQ_EXCHANGE_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: attempt-history-service-room-service-mq-client-config-map
+                  key: room-service-mq-exchange-name
+            - name: ROOM_SERVICE_MQ_QUEUE_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: attempt-history-service-room-service-mq-client-config-map
+                  key: room-service-mq-queue-name
+            - name: USER_SERVICE_HOST
+              value: user-service-api-service
+            - name: USER_SERVICE_PORT
+              value: '9000'
+            - name: DOCS_SERVICE_HOST
+              value: docs-service-api-service
+            - name: DOCS_SERVICE_PORT
+              value: '9007'
+          resources:
+            requests:
+              memory: 128Mi
+              cpu: 100m
+            limits:
+              memory: 256Mi
+              cpu: 500m

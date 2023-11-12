@@ -2,28 +2,20 @@
 
 Keeps tracks of the user's attempts.
 
-- [PeerPrep Attempt History Service](#peerprep-attempt-history-service)
-  - [Quickstart Guide](#quickstart-guide)
-  - [Build Script](#build-script)
-  - [Architecture](#architecture)
-  - [Docker Images](#docker-images)
-    - [API](#api)
-    - [Database Initialiser](#database-initialiser)
-    - [Message Queue Consumer](#message-queue-consumer)
-  - [REST API](#rest-api)
-    - [Get user attempt history](#get-user-attempt-history)
-    - [Get user attempt code](#get-user-attempt-code)
-    - [Add to attempt history](#add-to-attempt-history)
-    - [Rank all users by attempt count](#rank-all-users-by-attempt-count)
-
-## Quickstart Guide
-
-Note that Attempt History Service relies on User Service and Document Service. Please ensure that these services are up and running before attempting to start Attempt History Service.
-
-1. Clone this repository.
-2. Build the docker images by running: `./build_images.sh`
-3. Modify the ".env" file as per needed. Refer to [Docker Images](#docker-images) for the list of environment variables.
-4. Create the docker containers by running: `docker compose up`
+- [Build Script](#build-script)
+- [Architecture](#architecture)
+- [Docker Images](#docker-images)
+  - [API](#api)
+  - [Database Initialiser](#database-initialiser)
+  - [Room Event Consumer](#room-event-consumer)
+- [Deployment](#deployment)
+  - [Kubernetes Deployment](#kubernetes-deployment)
+  - [Docker Compose Deployment](#docker-compose-deployment)
+- [REST API](#rest-api)
+  - [Get user attempt history](#get-user-attempt-history)
+  - [Get user attempt code](#get-user-attempt-code)
+  - [Add to attempt history](#add-to-attempt-history)
+  - [Rank all users by attempt count](#rank-all-users-by-attempt-count)
 
 ## Build Script
 
@@ -35,7 +27,7 @@ Note that Attempt History Service relies on User Service and Document Service. P
 
 ## Architecture
 
-![](./images/architecture.png)
+![](./images/architecture.jpg)
 
 Legend:
 
@@ -45,6 +37,29 @@ Legend:
 - `#7FBA42` Green items represents internal servers/containers that are exposed.
 - `#2072B8` Blue items represents external servers/containers.
 
+**REST API Server**
+
+- Handles REST API requests.
+- Exposed to clients/servers outside the service.
+- Can be scaled horizontally.
+- Corresponds to the [API](#api) docker image.
+
+**Database Initialiser**
+
+- Creates entities in the database.
+- Does nothing if the database already contains one or more entities it intends to create (behaviour can be changed via environment variables).
+- Shuts down once it is done initialising the database.
+- Corresponds to the [Database Initialiser](#database-initialiser) docker image.
+
+**Room Event Consumer**
+
+- Consumes "remove user from room" events from the Room Service MQ and sends a request to the REST API server to add attempt history.
+- Can be scaled horizontally.
+- Corresponds to the [Room Event Consumer](#room-event-consumer) docker image.
+
+**Database**
+
+- Database for storing attempt history.
 
 ## Docker Images
 
@@ -56,18 +71,18 @@ Legend:
 
 **Environment Variables:**
 
-- `NODE_ENV` - Mode the app is running on ("development" or "production").
-- `AHS_EXPRESS_PORT` - Port to listen on.
-- `AHS_DB_HOST` - Address of the Database.
-- `AHS_DB_PORT` - Port of the Database.
-- `AHS_DB_USER` - Username of the user in the Database.
-- `AHS_DB_PASS` - Password of the user in the Database.
-- `AHS_DB` - Name of the database.
+- `DATABASE_USER` - Username of the user in the database.
+- `DATABASE_PASSWORD` - Password of the user in the database.
+- `DATABASE_HOST` - Address of the database host.
+- `DATABASE_PORT` - Port the database is listening on.
 - `DATABASE_SHOULD_USE_TLS` - Should database connection be secured with TLS. Set to "true" to enable.
+- `DATABASE_NAME` - Name of the database.
 - `DATABASE_CONNECTION_TIMEOUT_MILLIS` - Number of milliseconds for a database client to connect to the database before timing out.
 - `DATABASE_MAX_CLIENT_COUNT` - Max number of database clients.
-- `SERVICE_USER_HOST` - Address of the User Service host.
-- `SERVICE_USER_PORT` - Port the User Service is listening on.
+- `USER_SERVICE_HOST` - Address of the User Service host.
+- `USER_SERVICE_PORT` - Port the User Service is listening on.
+- `API_PORT` - Port to listen on.
+- `NODE_ENV` - Mode the app is running on ("development" or "production").
 
 ### Database Initialiser
 
@@ -77,38 +92,84 @@ Legend:
 
 **Environment Variables:**
 
-- `AHS_DB_HOST` - Address of the Database.
-- `AHS_DB_PORT` - Port of the Database.
-- `AHS_DB_USER` - Username of the user in the Database.
-- `AHS_DB_PASS` - Password of the user in the Database.
-- `AHS_DB` - Name of the database.
+- `DATABASE_USER` - Username of the user in the database.
+- `DATABASE_PASSWORD` - Password of the user in the database.
+- `DATABASE_HOST` - Address of the database host.
+- `DATABASE_PORT` - Port the database is listening on.
 - `DATABASE_SHOULD_USE_TLS` - Should database connection be secured with TLS. Set to "true" to enable.
+- `DATABASE_NAME` - Name of the database.
 - `DATABASE_CONNECTION_TIMEOUT_MILLIS` - Number of milliseconds for a database client to connect to the database before timing out.
 - `DATABASE_MAX_CLIENT_COUNT` - Max number of database clients.
 - `SHOULD_FORCE_INITIALISATION` - Should database initialisation be done regardless of whether one or more entities to be created already exist. Set to "true" to enable (may cause data loss).
 
-### Message Queue Consumer
+### Room Event Consumer
 
-**Name:** ghcr.io/cs3219-ay2324s1-g04/peerprep_attempt_history_service_mq_consumer
+**Name:** ghcr.io/cs3219-ay2324s1-g04/peerprep_attempt_history_service_room_event_consumer
 
-**Description:** Listens to the message queue provided by room-service.
+**Description:** Listens to the message queue provided by Room Service.
 
 **Environment Variables:**
 
-- `AHS_HOST` - Address of Attempt History API.
-- `AHS_PORT` - Port of Attempt History API.
-- `SERVICE_ROOM_MQ_USER` - User on the MQ host.
-- `SERVICE_ROOM_MQ_PASS` - Password of the MQ.
-- `SERVICE_ROOM_MQ_HOST` - Address of the MQ host.
-- `SERVICE_ROOM_MQ_PORT` - Port the MQ is listening on.
-- `SERVICE_ROOM_MQ_VHOST` - Vhost of the MQ.
-- `SERVICE_ROOM_MQ_TLS` - Should MQ connection be secured with TLS. Set to "true" to enable.
-- `SERVICE_ROOM_MQ_XCHANGE` - Name of the MQ exchange.
-- `SERVICE_ROOM_MQ_QNAME` - Name of the MQ queue.
-- `SERVICE_USER_HOST` - Address of the User Service host.
-- `SERVICE_USER_PORT` - Port the User Service.
-- `SERVICE_DOCUMENT_HOST` - Address of the Document Service.
-- `SERVICE_DOCUMENT_PORT` - Port the Document Service.
+- `API_HOST` - Address of Attempt History Service API Server.
+- `API_PORT` - Port of Attempt History Service API Server.
+- `ROOM_SERVICE_MQ_USER` - User on the MQ host.
+- `ROOM_SERVICE_MQ_PASSWORD` - Password of the MQ.
+- `ROOM_SERVICE_MQ_HOST` - Address of the MQ host.
+- `ROOM_SERVICE_MQ_PORT` - Port the MQ is listening on.
+- `ROOM_SERVICE_MQ_VHOST` - Vhost of the MQ.
+- `ROOM_SERVICE_MQ_SHOULD_USE_TLS` - Should MQ connection be secured with TLS. Set to "true" to enable.
+- `ROOM_SERVICE_MQ_EXCHANGE_NAME` - Name of the MQ exchange.
+- `ROOM_SERVICE_MQ_QUEUE_NAME` - Name of the MQ queue.
+- `USER_SERVICE_HOST` - Address of the User Service host.
+- `USER_SERVICE_PORT` - Port the User Service is listening on.
+- `DOCS_SERVICE_HOST` - Address of the Docs Service.
+- `DOCS_SERVICE_PORT` - Port the Docs Service.
+
+## Deployment
+
+### Kubernetes Deployment
+
+This is the main deployment method for production.
+
+**Note:**
+
+- The database is hosted externally, not within the Kubernetes cluster.
+
+**Prerequisite**
+
+- Docker images must be pushed to the container registry and made public.
+  - To push to the container registry (assuming one has the necessary permissions), run: `./build_images.sh -p`
+  - To make the images public, change the visibility of the image on [GitHub](https://github.com/orgs/CS3219-AY2324S1-G04/packages).
+- Kubernetes cluster must be setup as specified in the [main repository](https://github.com/CS3219-AY2324S1/ay2324s1-course-assessment-g04#deployment).
+- User Service and Docs Service must be deployed within the Kubernetes cluster.
+
+**Steps:**
+
+1. Ensure the "peerprep" namespace has been created: `kubectl create namespace peerprep`
+2. Navigate to the "kubernetes" directory: `cd kubernetes`
+3. Deploy the Kubernetes objects: `./deploy.sh`
+    - To delete the Kubernetes objects, run: `./delete.sh`
+
+### Docker Compose Deployment
+
+This is intended for development use only. It is meant to make developing other services easier.
+
+**Note:**
+
+- No horizontal auto scaling is provided.
+- The database is created by Docker compose and data is not backed up.
+
+**Prerequisite**
+
+- Docker images must be built.
+  - To build the images, run: `./build_images.sh`
+- User Service and Docs Service must be deployed via Docker compose.
+
+**Steps:**
+
+1. Ensure that the "peerprep" network exist: `docker network create -d bridge peerprep`
+2. Create the docker containers: `docker compose up`
+    - To delete the docker containers, run: `docker compose down`
 
 ## REST API
 
@@ -130,7 +191,6 @@ Legend:
 
 > [GET] `/attempt-history-service/:aid`
 
-**Description**
 This returns a particular user's attempt, in particular their code.
 
 Note that the code return is in raw form, so there could be code injection present.
@@ -152,7 +212,6 @@ Note that the code return is in raw form, so there could be code injection prese
 
 > [POST] `/attempt-history-service/add`
 
-**Description**
 For internal use only.
 
 Note that (user id, room id) is considered primary keys. That is to say, their combination is what makes an entry unique.
@@ -184,7 +243,6 @@ This will create an entry for the user.
 
 > [GET] `/attempt-history-service/all`
 
-**Description**
 Rank all users by attempt count and sort them by user id and count.
 
 **Returns**

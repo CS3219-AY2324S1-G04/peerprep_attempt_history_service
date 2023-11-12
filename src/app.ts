@@ -43,7 +43,7 @@ export default class App {
    * Starts listening and activates ttl.
    */
   public async startServer() {
-    attemptDataSource.initialize();
+    await attemptDataSource.initialize();
 
     this._app.listen(this._port, () => {
       console.log(`Room Service is running on port ${this._port}`);
