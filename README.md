@@ -182,7 +182,7 @@ This will create an entry for the user.
 
 ### Rank all users by attempt count
 
-> [GET] `/matching-service/all`
+> [GET] `/attempt-history-service/all`
 
 **Description**
 Rank all users by attempt count and sort them by user id and count.
