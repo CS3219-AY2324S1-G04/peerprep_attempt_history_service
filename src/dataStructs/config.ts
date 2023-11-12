@@ -5,11 +5,11 @@
 /** Represents the app's configs. */
 export default class Config {
   // Variable names that are found in environment
-  private static readonly _envDatabaseHost: string = 'AHS_DB_HOST';
-  private static readonly _envDatabasePort: string = 'AHS_DB_PORT';
-  private static readonly _envDatabaseUser: string = 'AHS_DB_USER';
-  private static readonly _envDatabasePass: string = 'AHS_DB_PASS';
-  private static readonly _envDatabaseDB: string = 'AHS_DB';
+  private static readonly _envDatabaseHost: string = 'DATABASE_HOST';
+  private static readonly _envDatabasePort: string = 'DATABASE_PORT';
+  private static readonly _envDatabaseUser: string = 'DATABASE_USER';
+  private static readonly _envDatabasePass: string = 'DATABASE_PASSWORD';
+  private static readonly _envDatabaseDB: string = 'DATABASE_NAME';
   private static readonly _envDatabaseTls: string = 'DATABASE_SHOULD_USE_TLS';
 
   private static readonly _envVarDatabaseTimeout: string =
@@ -17,12 +17,12 @@ export default class Config {
   private static readonly _envVarDatabasePool: string =
     'DATABASE_MAX_CLIENT_COUNT';
 
-  private static readonly _envVarExpressPort: string = 'AHS_EXPRESS_PORT';
+  private static readonly _envVarExpressPort: string = 'API_PORT';
   private static readonly _appModeEnvVar: string = 'NODE_ENV';
 
   // Talk to US if user tries retrieve stats
-  private static readonly _envUserServiceHost: string = 'SERVICE_USER_HOST';
-  private static readonly _envUserServicePort: string = 'SERVICE_USER_PORT';
+  private static readonly _envUserServiceHost: string = 'USER_SERVICE_HOST';
+  private static readonly _envUserServicePort: string = 'USER_SERVICE_PORT';
 
   /** Other variables. */
   private static _instance: Config;

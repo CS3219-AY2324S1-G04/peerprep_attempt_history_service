@@ -6,25 +6,28 @@
 export default class Config {
   // Variable names that are found in environment
 
-  private static readonly _envAttemptHistoryHost: string = 'AHS_HOST';
-  private static readonly _envAttemptHistoryPort: string = 'AHS_PORT';
+  private static readonly _envAttemptHistoryHost: string = 'API_HOST';
+  private static readonly _envAttemptHistoryPort: string = 'API_PORT';
   private static readonly _appModeEnvVar: string = 'NODE_ENV';
 
   // Talk to US if user tries retrieve stats
-  private static readonly _envUserServiceHost: string = 'SERVICE_USER_HOST';
-  private static readonly _envUserServicePort: string = 'SERVICE_USER_PORT';
+  private static readonly _envUserServiceHost: string = 'USER_SERVICE_HOST';
+  private static readonly _envUserServicePort: string = 'USER_SERVICE_PORT';
 
-  private static readonly _envRoomMQPass: string = 'SERVICE_ROOM_MQ_PASS';
-  private static readonly _envRoomMQUser: string = 'SERVICE_ROOM_MQ_USER';
-  private static readonly _envRoomMQHost: string = 'SERVICE_ROOM_MQ_HOST';
-  private static readonly _envRoomMQPort: string = 'SERVICE_ROOM_MQ_PORT';
-  private static readonly _envRoomMQVhost: string = 'SERVICE_ROOM_MQ_VHOST';
-  private static readonly _envRoomMQTls: string = 'SERVICE_ROOM_MQ_TLS';
-  private static readonly _envRoomMQXchange: string = 'SERVICE_ROOM_MQ_XCHANGE';
-  private static readonly _envRoomMQQname: string = 'SERVICE_ROOM_MQ_QNAME';
+  private static readonly _envRoomMQPass: string = 'ROOM_SERVICE_MQ_PASSWORD';
+  private static readonly _envRoomMQUser: string = 'ROOM_SERVICE_MQ_USER';
+  private static readonly _envRoomMQHost: string = 'ROOM_SERVICE_MQ_HOST';
+  private static readonly _envRoomMQPort: string = 'ROOM_SERVICE_MQ_PORT';
+  private static readonly _envRoomMQVhost: string = 'ROOM_SERVICE_MQ_VHOST';
+  private static readonly _envRoomMQTls: string =
+    'ROOM_SERVICE_MQ_SHOULD_USE_TLS';
+  private static readonly _envRoomMQXchange: string =
+    'ROOM_SERVICE_MQ_EXCHANGE_NAME';
+  private static readonly _envRoomMQQname: string =
+    'ROOM_SERVICE_MQ_QUEUE_NAME';
 
-  private static readonly _envDocumentHost: string = 'SERVICE_DOCUMENT_HOST';
-  private static readonly _envDocumentPort: string = 'SERVICE_DOCUMENT_PORT';
+  private static readonly _envDocumentHost: string = 'DOC_SERVICE_HOST';
+  private static readonly _envDocumentPort: string = 'DOC_SERVICE_PORT';
 
   /** Other variables. */
   private static _instance: Config;

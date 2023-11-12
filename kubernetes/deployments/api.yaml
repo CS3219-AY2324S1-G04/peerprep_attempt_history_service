@@ -21,22 +21,22 @@ spec:
           ports:
             - containerPort: 9006
           env:
-            - name: AHS_DB_USER
+            - name: DATABASE_USER
               valueFrom:
                 configMapKeyRef:
                   name: attempt-history-service-database-client-config-map
                   key: database-user
-            - name: AHS_DB_PASS
+            - name: DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: attempt-history-service-database-client-secret
                   key: database-password
-            - name: AHS_DB_HOST
+            - name: DATABASE_HOST
               valueFrom:
                 configMapKeyRef:
                   name: attempt-history-service-database-client-config-map
                   key: database-host
-            - name: AHS_DB_PORT
+            - name: DATABASE_PORT
               valueFrom:
                 configMapKeyRef:
                   name: attempt-history-service-database-client-config-map
@@ -46,7 +46,7 @@ spec:
                 configMapKeyRef:
                   name: attempt-history-service-database-client-config-map
                   key: database-should-use-tls
-            - name: AHS_DB
+            - name: DATABASE_NAME
               valueFrom:
                 configMapKeyRef:
                   name: attempt-history-service-database-client-config-map
@@ -61,11 +61,11 @@ spec:
                 configMapKeyRef:
                   name: attempt-history-service-database-client-config-map
                   key: database-max-client-count
-            - name: SERVICE_USER_HOST
+            - name: USER_SERVICE_HOST
               value: user-service-api-service
-            - name: SERVICE_USER_PORT
+            - name: USER_SERVICE_PORT
               value: '9000'
-            - name: AHS_EXPRESS_PORT
+            - name: API_PORT
               value: '9006'
             - name: NODE_ENV
               value: production

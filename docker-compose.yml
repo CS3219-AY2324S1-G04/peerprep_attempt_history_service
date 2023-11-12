@@ -1,16 +1,16 @@
-version: "3"
+version: '3'
 services:
   attempt_history_service_database:
     image: postgres:16-bookworm
     networks:
       - peerprep
     environment:
-      POSTGRES_USER: ${AHS_DB_USER}
-      POSTGRES_PASSWORD: ${AHS_DB_PASS}
-      POSTGRES_DB: ${AHS_DB}
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_DB: ${DATABASE_NAME}
     restart: unless-stopped
 
-  attempt_history_service_database_init:
+  attempt_history_service_database_initialiser:
     image: ghcr.io/cs3219-ay2324s1-g04/peerprep_attempt_history_service_database_initialiser
     build:
       context: .
@@ -18,16 +18,15 @@ services:
     networks:
       - peerprep
     environment:
-      AHS_DB_HOST: attempt_history_service_database
-      AHS_DB_PORT: 5432
-      AHS_DB_USER: ${AHS_DB_USER}
-      AHS_DB_PASS: ${AHS_DB_PASS}
-      AHS_DB: ${AHS_DB}
-      DATABASE_SHOULD_USE_TLS : ${DATABASE_SHOULD_USE_TLS}
-      DATABASE_CONNECTION_TIMEOUT_MILLIS : ${DATABASE_CONNECTION_TIMEOUT_MILLIS}
-      DATABASE_MAX_CLIENT_COUNT : ${DATABASE_MAX_CLIENT_COUNT}
-
-      SHOULD_FORCE_INITIALISATION : ${SHOULD_FORCE_INITIALISATION}
+      DATABASE_USER: ${DATABASE_USER}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+      DATABASE_HOST: attempt_history_service_database
+      DATABASE_PORT: 5432
+      DATABASE_SHOULD_USE_TLS: ${DATABASE_SHOULD_USE_TLS}
+      DATABASE_NAME: ${DATABASE_NAME}
+      DATABASE_CONNECTION_TIMEOUT_MILLIS: ${DATABASE_CONNECTION_TIMEOUT_MILLIS}
+      DATABASE_MAX_CLIENT_COUNT: ${DATABASE_MAX_CLIENT_COUNT}
+      SHOULD_FORCE_INITIALISATION: ${SHOULD_FORCE_INITIALISATION}
     depends_on:
       - attempt_history_service_database
     restart: on-failure
@@ -40,22 +39,22 @@ services:
     networks:
       - peerprep
     ports:
-       - ${AHS_EXPRESS_PORT}:${AHS_EXPRESS_PORT}
+      - ${API_PORT}:${API_PORT}
     environment:
-      AHS_EXPRESS_PORT : ${AHS_EXPRESS_PORT}
-      NODE_ENV : ${NODE_ENV}
+      DATABASE_USER: ${DATABASE_USER}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+      DATABASE_HOST: attempt_history_service_database
+      DATABASE_PORT: 5432
+      DATABASE_SHOULD_USE_TLS: ${DATABASE_SHOULD_USE_TLS}
+      DATABASE_NAME: ${DATABASE_NAME}
+      DATABASE_CONNECTION_TIMEOUT_MILLIS: ${DATABASE_CONNECTION_TIMEOUT_MILLIS}
+      DATABASE_MAX_CLIENT_COUNT: ${DATABASE_MAX_CLIENT_COUNT}
 
-      AHS_DB_HOST : attempt_history_service_database
-      AHS_DB_PORT: 5432
-      AHS_DB_USER: ${AHS_DB_USER}
-      AHS_DB_PASS: ${AHS_DB_PASS}
-      AHS_DB: ${AHS_DB}
-      DATABASE_SHOULD_USE_TLS : ${DATABASE_SHOULD_USE_TLS}
-      DATABASE_CONNECTION_TIMEOUT_MILLIS : ${DATABASE_CONNECTION_TIMEOUT_MILLIS}
-      DATABASE_MAX_CLIENT_COUNT : ${DATABASE_MAX_CLIENT_COUNT}
+      USER_SERVICE_HOST: ${USER_SERVICE_HOST}
+      USER_SERVICE_PORT: ${USER_SERVICE_PORT}
 
-      SERVICE_USER_HOST: ${SERVICE_USER_HOST}
-      SERVICE_USER_PORT: ${SERVICE_USER_PORT}
+      API_PORT: ${API_PORT}
+      NODE_ENV: ${NODE_ENV}
     depends_on:
       - attempt_history_service_database
     restart: unless-stopped
@@ -68,23 +67,23 @@ services:
     networks:
       - peerprep
     environment:
-      AHS_HOST : attempt_history_service_api
-      AHS_PORT : ${AHS_EXPRESS_PORT}
+      API_HOST: attempt_history_service_api
+      API_PORT: ${API_PORT}
 
-      SERVICE_ROOM_MQ_PASS: ${SERVICE_ROOM_MQ_PASS}
-      SERVICE_ROOM_MQ_USER: ${SERVICE_ROOM_MQ_USER}
-      SERVICE_ROOM_MQ_HOST: ${SERVICE_ROOM_MQ_HOST}
-      SERVICE_ROOM_MQ_PORT: ${SERVICE_ROOM_MQ_PORT}
-      SERVICE_ROOM_MQ_VHOST: ${SERVICE_ROOM_MQ_VHOST}
-      SERVICE_ROOM_MQ_TLS: ${SERVICE_ROOM_MQ_TLS}
-      SERVICE_ROOM_MQ_XCHANGE: ${SERVICE_ROOM_MQ_XCHANGE}
-      SERVICE_ROOM_MQ_QNAME: ${SERVICE_ROOM_MQ_QNAME}
+      ROOM_SERVICE_MQ_USER: ${ROOM_SERVICE_MQ_USER}
+      ROOM_SERVICE_MQ_PASSWORD: ${ROOM_SERVICE_MQ_PASSWORD}
+      ROOM_SERVICE_MQ_HOST: ${ROOM_SERVICE_MQ_HOST}
+      ROOM_SERVICE_MQ_PORT: ${ROOM_SERVICE_MQ_PORT}
+      ROOM_SERVICE_MQ_VHOST: ${ROOM_SERVICE_MQ_VHOST}
+      ROOM_SERVICE_MQ_SHOULD_USE_TLS: ${ROOM_SERVICE_MQ_SHOULD_USE_TLS}
+      ROOM_SERVICE_MQ_EXCHANGE_NAME: ${ROOM_SERVICE_MQ_EXCHANGE_NAME}
+      ROOM_SERVICE_MQ_QUEUE_NAME: ${ROOM_SERVICE_MQ_QUEUE_NAME}
 
-      SERVICE_USER_HOST: ${SERVICE_USER_HOST}
-      SERVICE_USER_PORT: ${SERVICE_USER_PORT}
+      USER_SERVICE_HOST: ${USER_SERVICE_HOST}
+      USER_SERVICE_PORT: ${USER_SERVICE_PORT}
 
-      SERVICE_DOCUMENT_HOST: ${SERVICE_DOCUMENT_HOST}
-      SERVICE_DOCUMENT_PORT: ${SERVICE_DOCUMENT_PORT}
+      DOC_SERVICE_HOST: ${DOC_SERVICE_HOST}
+      DOC_SERVICE_PORT: ${DOC_SERVICE_PORT}
     depends_on:
       - attempt_history_service_api
     restart: unless-stopped

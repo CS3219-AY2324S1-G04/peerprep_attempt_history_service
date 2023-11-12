@@ -4,10 +4,10 @@ metadata:
   name: attempt-history-service-room-service-mq-client-config-map
   namespace: peerprep
 data:
-  service-room-mq-user: lntyztej
-  service-room-mq-host: octopus.rmq3.cloudamqp.com
-  service-room-mq-port: '5671'
-  service-room-mq-vhost: lntyztej
-  service-room-mq-should-use-tls: 'true'
-  service-room-mq-exchange-name: room-events
-  service-room-mq-queue-name: attempt-history-service-room-event-queue
+  room-service-mq-user: lntyztej
+  room-service-mq-host: octopus.rmq3.cloudamqp.com
+  room-service-mq-port: '5671'
+  room-service-mq-vhost: lntyztej
+  room-service-mq-should-use-tls: 'true'
+  room-service-mq-exchange-name: room-events
+  room-service-mq-queue-name: attempt-history-service-room-event-queue

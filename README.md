@@ -57,17 +57,17 @@ Legend:
 **Environment Variables:**
 
 - `NODE_ENV` - Mode the app is running on ("development" or "production").
-- `AHS_EXPRESS_PORT` - Port to listen on.
-- `AHS_DB_HOST` - Address of the Database.
-- `AHS_DB_PORT` - Port of the Database.
-- `AHS_DB_USER` - Username of the user in the Database.
-- `AHS_DB_PASS` - Password of the user in the Database.
-- `AHS_DB` - Name of the database.
+- `API_PORT` - Port to listen on.
+- `DATABASE_HOST` - Address of the Database.
+- `DATABASE_PORT` - Port of the Database.
+- `DATABASE_USER` - Username of the user in the Database.
+- `DATABASE_PASSWORD` - Password of the user in the Database.
+- `DATABASE_NAME` - Name of the database.
 - `DATABASE_SHOULD_USE_TLS` - Should database connection be secured with TLS. Set to "true" to enable.
 - `DATABASE_CONNECTION_TIMEOUT_MILLIS` - Number of milliseconds for a database client to connect to the database before timing out.
 - `DATABASE_MAX_CLIENT_COUNT` - Max number of database clients.
-- `SERVICE_USER_HOST` - Address of the User Service host.
-- `SERVICE_USER_PORT` - Port the User Service is listening on.
+- `USER_SERVICE_HOST` - Address of the User Service host.
+- `USER_SERVICE_PORT` - Port the User Service is listening on.
 
 ### Database Initialiser
 
@@ -77,11 +77,11 @@ Legend:
 
 **Environment Variables:**
 
-- `AHS_DB_HOST` - Address of the Database.
-- `AHS_DB_PORT` - Port of the Database.
-- `AHS_DB_USER` - Username of the user in the Database.
-- `AHS_DB_PASS` - Password of the user in the Database.
-- `AHS_DB` - Name of the database.
+- `DATABASE_HOST` - Address of the Database.
+- `DATABASE_PORT` - Port of the Database.
+- `DATABASE_USER` - Username of the user in the Database.
+- `DATABASE_PASSWORD` - Password of the user in the Database.
+- `DATABASE_NAME` - Name of the database.
 - `DATABASE_SHOULD_USE_TLS` - Should database connection be secured with TLS. Set to "true" to enable.
 - `DATABASE_CONNECTION_TIMEOUT_MILLIS` - Number of milliseconds for a database client to connect to the database before timing out.
 - `DATABASE_MAX_CLIENT_COUNT` - Max number of database clients.
@@ -95,20 +95,20 @@ Legend:
 
 **Environment Variables:**
 
-- `AHS_HOST` - Address of Attempt History API.
-- `AHS_PORT` - Port of Attempt History API.
-- `SERVICE_ROOM_MQ_USER` - User on the MQ host.
-- `SERVICE_ROOM_MQ_PASS` - Password of the MQ.
-- `SERVICE_ROOM_MQ_HOST` - Address of the MQ host.
-- `SERVICE_ROOM_MQ_PORT` - Port the MQ is listening on.
-- `SERVICE_ROOM_MQ_VHOST` - Vhost of the MQ.
-- `SERVICE_ROOM_MQ_TLS` - Should MQ connection be secured with TLS. Set to "true" to enable.
-- `SERVICE_ROOM_MQ_XCHANGE` - Name of the MQ exchange.
-- `SERVICE_ROOM_MQ_QNAME` - Name of the MQ queue.
-- `SERVICE_USER_HOST` - Address of the User Service host.
-- `SERVICE_USER_PORT` - Port the User Service.
-- `SERVICE_DOCUMENT_HOST` - Address of the Document Service.
-- `SERVICE_DOCUMENT_PORT` - Port the Document Service.
+- `API_HOST` - Address of Attempt History API.
+- `API_PORT` - Port of Attempt History API.
+- `ROOM_SERVICE_MQ_USER` - User on the MQ host.
+- `ROOM_SERVICE_MQ_PASSWORD` - Password of the MQ.
+- `ROOM_SERVICE_MQ_HOST` - Address of the MQ host.
+- `ROOM_SERVICE_MQ_PORT` - Port the MQ is listening on.
+- `ROOM_SERVICE_MQ_VHOST` - Vhost of the MQ.
+- `ROOM_SERVICE_MQ_SHOULD_USE_TLS` - Should MQ connection be secured with TLS. Set to "true" to enable.
+- `ROOM_SERVICE_MQ_EXCHANGE_NAME` - Name of the MQ exchange.
+- `ROOM_SERVICE_MQ_QUEUE_NAME` - Name of the MQ queue.
+- `USER_SERVICE_HOST` - Address of the User Service host.
+- `USER_SERVICE_PORT` - Port the User Service.
+- `DOC_SERVICE_HOST` - Address of the Document Service.
+- `DOC_SERVICE_PORT` - Port the Document Service.
 
 ## REST API
 

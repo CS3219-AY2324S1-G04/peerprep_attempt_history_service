@@ -14,22 +14,22 @@ spec:
         - name: attempt-history-service-database-initialiser
           image: ghcr.io/cs3219-ay2324s1-g04/peerprep_attempt_history_service_database_initialiser
           env:
-            - name: AHS_DB_USER
+            - name: DATABASE_USER
               valueFrom:
                 configMapKeyRef:
                   name: attempt-history-service-database-client-config-map
                   key: database-user
-            - name: AHS_DB_PASS
+            - name: DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: attempt-history-service-database-client-secret
                   key: database-password
-            - name: AHS_DB_HOST
+            - name: DATABASE_HOST
               valueFrom:
                 configMapKeyRef:
                   name: attempt-history-service-database-client-config-map
                   key: database-host
-            - name: AHS_DB_PORT
+            - name: DATABASE_PORT
               valueFrom:
                 configMapKeyRef:
                   name: attempt-history-service-database-client-config-map
@@ -39,7 +39,7 @@ spec:
                 configMapKeyRef:
                   name: attempt-history-service-database-client-config-map
                   key: database-should-use-tls
-            - name: AHS_DB
+            - name: DATABASE_NAME
               valueFrom:
                 configMapKeyRef:
                   name: attempt-history-service-database-client-config-map
