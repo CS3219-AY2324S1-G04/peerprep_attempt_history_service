@@ -5,11 +5,11 @@
 /** Represents the app's configs. */
 export default class Config {
   // Variable names that are found in environment
-  private static readonly _envDatabaseHost: string = 'HS_DB_HOST';
-  private static readonly _envDatabasePort: string = 'HS_DB_PORT';
-  private static readonly _envDatabaseUser: string = 'HS_DB_USER';
-  private static readonly _envDatabasePass: string = 'HS_DB_PASS';
-  private static readonly _envDatabaseDB: string = 'HS_DB';
+  private static readonly _envDatabaseHost: string = 'AHS_DB_HOST';
+  private static readonly _envDatabasePort: string = 'AHS_DB_PORT';
+  private static readonly _envDatabaseUser: string = 'AHS_DB_USER';
+  private static readonly _envDatabasePass: string = 'AHS_DB_PASS';
+  private static readonly _envDatabaseDB: string = 'AHS_DB';
   private static readonly _envDatabaseTls: string = 'DATABASE_SHOULD_USE_TLS';
 
   private static readonly _envVarDatabaseTimeout: string =

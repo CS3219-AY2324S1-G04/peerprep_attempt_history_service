@@ -66,7 +66,7 @@ router.get('/', verifyJwt, async (req, res) => {
 //  * - The code itself.
 //  *
 //  * Example:
-//  * GET /attempt-service/manual?user=1&question=100&room=200&language=python3
+//  * GET /attempt-history-service/manual?user=1&question=100&room=200&language=python3
 //  * Body: lorem ipsum.
 //  *
 //  * 200 + data : success
@@ -116,7 +116,7 @@ router.get('/', verifyJwt, async (req, res) => {
  * - The code itself.
  *
  * Example:
- * POST /attempt-service/add?user=1&question=100&room=200&language=python3
+ * POST /attempt-history-service/add?user=1&question=100&room=200&language=python3
  * Body json: { data : 'lorem ipsum' }.
  *
  * 200 : success

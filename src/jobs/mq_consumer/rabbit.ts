@@ -46,7 +46,7 @@ export async function consumer(): Promise<void> {
       let userCode = 'lorem ipsum';
       try {
         const getCode = await axios.get(
-          config.editorServiceURL + '/docs-service/docs/' + data.room.roomId,
+          config.documentServiceURL + '/docs-service/docs/' + data.room.roomId,
         );
         console.log(getCode.data.doc);
         userCode = getCode.data.doc;
@@ -63,7 +63,7 @@ export async function consumer(): Promise<void> {
           `?user=${data.removedUserId}&${questionId}` +
           `&${roomId}&${language}`;
         await axios.post(
-          config.attemptHistoryURL + '/attempt-service/add' + userOne,
+          config.attemptHistoryURL + '/attempt-history-service/add' + userOne,
           requestBody,
         );
       } catch (error) {

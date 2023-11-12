@@ -1,5 +1,4 @@
-.vs/
 .vscode/
-build/
 docker_build/
+kubernetes/
 node_modules/

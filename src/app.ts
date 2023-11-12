@@ -60,7 +60,7 @@ export default class App {
   }
 
   private _routes(): void {
-    this._app.use('/attempt-service', history);
+    this._app.use('/attempt-history-service', history);
   }
 
   private _enableDevFeatures(): void {

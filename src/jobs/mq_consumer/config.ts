@@ -6,8 +6,8 @@
 export default class Config {
   // Variable names that are found in environment
 
-  private static readonly _envAttemptHistoryHost: string = 'HS_HOST';
-  private static readonly _envAttemptHistoryPort: string = 'HS_PORT';
+  private static readonly _envAttemptHistoryHost: string = 'AHS_HOST';
+  private static readonly _envAttemptHistoryPort: string = 'AHS_PORT';
   private static readonly _appModeEnvVar: string = 'NODE_ENV';
 
   // Talk to US if user tries retrieve stats
@@ -23,8 +23,8 @@ export default class Config {
   private static readonly _envRoomMQXchange: string = 'SERVICE_ROOM_MQ_XCHANGE';
   private static readonly _envRoomMQQname: string = 'SERVICE_ROOM_MQ_QNAME';
 
-  private static readonly _envEditorHost: string = 'SERVICE_EDITOR_HOST';
-  private static readonly _envEditorPort: string = 'SERVICE_EDITOR_PORT';
+  private static readonly _envDocumentHost: string = 'SERVICE_DOCUMENT_HOST';
+  private static readonly _envDocumentPort: string = 'SERVICE_DOCUMENT_PORT';
 
   /** Other variables. */
   private static _instance: Config;
@@ -44,7 +44,7 @@ export default class Config {
   public readonly roomMQXchange: string;
   public readonly roomMQQname: string;
 
-  public readonly editorServiceURL: string;
+  public readonly documentServiceURL: string;
 
   /** Copies from Development variables. */
   public readonly isDevEnv: boolean;
@@ -80,9 +80,9 @@ export default class Config {
       this.roomMQXchange = 'room-events';
       this.roomMQQname = 'attempt-history-service-room-event-queue';
 
-      const editorServiceHost = 'localhost';
-      const editorServicePort = 9004;
-      this.editorServiceURL = `http://${editorServiceHost}:${editorServicePort}`;
+      const documentServiceHost = 'localhost';
+      const documentServicePort = 9004;
+      this.documentServiceURL = `http://${documentServiceHost}:${documentServicePort}`;
     } else {
       const attemptHistoryHost = this._getEnvAsString(
         env,
@@ -118,9 +118,9 @@ export default class Config {
       this.roomMQXchange = this._getEnvAsString(env, Config._envRoomMQXchange);
       this.roomMQQname = this._getEnvAsString(env, Config._envRoomMQQname);
 
-      const editorHost = this._getEnvAsString(env, Config._envEditorHost);
-      const editorPort = this._getEnvAsInt(env, Config._envEditorPort);
-      this.editorServiceURL = `http://${editorHost}:${editorPort}`;
+      const documentHost = this._getEnvAsString(env, Config._envDocumentHost);
+      const documentPort = this._getEnvAsInt(env, Config._envDocumentPort);
+      this.documentServiceURL = `http://${documentHost}:${documentPort}`;
     }
   }
 
