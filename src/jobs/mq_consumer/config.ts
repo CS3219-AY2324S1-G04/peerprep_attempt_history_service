@@ -6,8 +6,8 @@
 export default class Config {
   // Variable names that are found in environment
 
-  private static readonly _envAttemptHistoryHost: string = 'HS_HOST';
-  private static readonly _envAttemptHistoryPort: string = 'HS_PORT';
+  private static readonly _envAttemptHistoryHost: string = 'AHS_HOST';
+  private static readonly _envAttemptHistoryPort: string = 'AHS_PORT';
   private static readonly _appModeEnvVar: string = 'NODE_ENV';
 
   // Talk to US if user tries retrieve stats

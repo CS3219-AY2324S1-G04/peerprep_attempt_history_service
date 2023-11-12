@@ -57,12 +57,12 @@ Legend:
 **Environment Variables:**
 
 - `NODE_ENV` - Mode the app is running on ("development" or "production").
-- `HS_EXPRESS_PORT` - Port to listen on.
-- `HS_DB_HOST` - Address of the Database.
-- `HS_DB_PORT` - Port of the Database.
-- `HS_DB_USER` - Username of the user in the Database.
-- `HS_DB_PASS` - Password of the user in the Database.
-- `HS_DB` - Name of the database.
+- `AHS_EXPRESS_PORT` - Port to listen on.
+- `AHS_DB_HOST` - Address of the Database.
+- `AHS_DB_PORT` - Port of the Database.
+- `AHS_DB_USER` - Username of the user in the Database.
+- `AHS_DB_PASS` - Password of the user in the Database.
+- `AHS_DB` - Name of the database.
 - `DATABASE_SHOULD_USE_TLS` - Should database connection be secured with TLS. Set to "true" to enable.
 - `DATABASE_CONNECTION_TIMEOUT_MILLIS` - Number of milliseconds for a database client to connect to the database before timing out.
 - `DATABASE_MAX_CLIENT_COUNT` - Max number of database clients.
@@ -77,11 +77,11 @@ Legend:
 
 **Environment Variables:**
 
-- `HS_DB_HOST` - Address of the Database.
-- `HS_DB_PORT` - Port of the Database.
-- `HS_DB_USER` - Username of the user in the Database.
-- `HS_DB_PASS` - Password of the user in the Database.
-- `HS_DB` - Name of the database.
+- `AHS_DB_HOST` - Address of the Database.
+- `AHS_DB_PORT` - Port of the Database.
+- `AHS_DB_USER` - Username of the user in the Database.
+- `AHS_DB_PASS` - Password of the user in the Database.
+- `AHS_DB` - Name of the database.
 - `DATABASE_SHOULD_USE_TLS` - Should database connection be secured with TLS. Set to "true" to enable.
 - `DATABASE_CONNECTION_TIMEOUT_MILLIS` - Number of milliseconds for a database client to connect to the database before timing out.
 - `DATABASE_MAX_CLIENT_COUNT` - Max number of database clients.
@@ -95,8 +95,8 @@ Legend:
 
 **Environment Variables:**
 
-- `HS_HOST` - Address of Attempt History API.
-- `HS_PORT` - Port of Attempt History API.
+- `AHS_HOST` - Address of Attempt History API.
+- `AHS_PORT` - Port of Attempt History API.
 - `SERVICE_ROOM_MQ_USER` - User on the MQ host.
 - `SERVICE_ROOM_MQ_PASS` - Password of the MQ.
 - `SERVICE_ROOM_MQ_HOST` - Address of the MQ host.

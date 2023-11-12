@@ -5,9 +5,9 @@ services:
     networks:
       - peerprep
     environment:
-      POSTGRES_USER: ${HS_DB_USER}
-      POSTGRES_PASSWORD: ${HS_DB_PASS}
-      POSTGRES_DB: ${HS_DB}
+      POSTGRES_USER: ${AHS_DB_USER}
+      POSTGRES_PASSWORD: ${AHS_DB_PASS}
+      POSTGRES_DB: ${AHS_DB}
     restart: unless-stopped
 
   attempt_history_service_database_init:
@@ -18,11 +18,11 @@ services:
     networks:
       - peerprep
     environment:
-      HS_DB_HOST : attempt_history_service_database
-      HS_DB_PORT: ${HS_DB_PORT}
-      HS_DB_USER: ${HS_DB_USER}
-      HS_DB_PASS: ${HS_DB_PASS}
-      HS_DB: ${HS_DB}
+      AHS_DB_HOST : attempt_history_service_database
+      AHS_DB_PORT: ${AHS_DB_PORT}
+      AHS_DB_USER: ${AHS_DB_USER}
+      AHS_DB_PASS: ${AHS_DB_PASS}
+      AHS_DB: ${AHS_DB}
       DATABASE_SHOULD_USE_TLS : ${DATABASE_SHOULD_USE_TLS}
       DATABASE_CONNECTION_TIMEOUT_MILLIS : ${DATABASE_CONNECTION_TIMEOUT_MILLIS}
       DATABASE_MAX_CLIENT_COUNT : ${DATABASE_MAX_CLIENT_COUNT}
@@ -39,16 +39,16 @@ services:
     networks:
       - peerprep
     ports:
-       - ${HS_EXPRESS_PORT}:${HS_EXPRESS_PORT}
+       - ${AHS_EXPRESS_PORT}:${AHS_EXPRESS_PORT}
     environment:
-      HS_EXPRESS_PORT : ${HS_EXPRESS_PORT}
+      AHS_EXPRESS_PORT : ${AHS_EXPRESS_PORT}
       NODE_ENV : ${NODE_ENV}
 
-      HS_DB_HOST : attempt_history_service_database
-      HS_DB_PORT: ${HS_DB_PORT}
-      HS_DB_USER: ${HS_DB_USER}
-      HS_DB_PASS: ${HS_DB_PASS}
-      HS_DB: ${HS_DB}
+      AHS_DB_HOST : attempt_history_service_database
+      AHS_DB_PORT: ${AHS_DB_PORT}
+      AHS_DB_USER: ${AHS_DB_USER}
+      AHS_DB_PASS: ${AHS_DB_PASS}
+      AHS_DB: ${AHS_DB}
 
       DATABASE_SHOULD_USE_TLS : ${DATABASE_SHOULD_USE_TLS}
       DATABASE_CONNECTION_TIMEOUT_MILLIS : ${DATABASE_CONNECTION_TIMEOUT_MILLIS}
@@ -68,8 +68,8 @@ services:
     networks:
       - peerprep
     environment:
-      HS_HOST : attempt_history_service_api
-      HS_PORT : ${HS_EXPRESS_PORT}
+      AHS_HOST : attempt_history_service_api
+      AHS_PORT : ${AHS_EXPRESS_PORT}
 
       SERVICE_ROOM_MQ_PASS: ${SERVICE_ROOM_MQ_PASS}
       SERVICE_ROOM_MQ_USER: ${SERVICE_ROOM_MQ_USER}
