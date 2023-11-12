@@ -2,19 +2,18 @@
 
 Keeps tracks of the user's attempts.
 
-- [PeerPrep Attempt History Service](#peerprep-attempt-history-service)
-  - [Quickstart Guide](#quickstart-guide)
-  - [Build Script](#build-script)
-  - [Architecture](#architecture)
-  - [Docker Images](#docker-images)
-    - [API](#api)
-    - [Database Initialiser](#database-initialiser)
-    - [Message Queue Consumer](#message-queue-consumer)
-  - [REST API](#rest-api)
-    - [Get user attempt history](#get-user-attempt-history)
-    - [Get user attempt code](#get-user-attempt-code)
-    - [Add to attempt history](#add-to-attempt-history)
-    - [Rank all users by attempt count](#rank-all-users-by-attempt-count)
+- [Quickstart Guide](#quickstart-guide)
+- [Build Script](#build-script)
+- [Architecture](#architecture)
+- [Docker Images](#docker-images)
+  - [API](#api)
+  - [Database Initialiser](#database-initialiser)
+  - [Message Queue Consumer](#message-queue-consumer)
+- [REST API](#rest-api)
+  - [Get user attempt history](#get-user-attempt-history)
+  - [Get user attempt code](#get-user-attempt-code)
+  - [Add to attempt history](#add-to-attempt-history)
+  - [Rank all users by attempt count](#rank-all-users-by-attempt-count)
 
 ## Quickstart Guide
 
@@ -89,7 +88,7 @@ Legend:
 
 ### Message Queue Consumer
 
-**Name:** ghcr.io/cs3219-ay2324s1-g04/peerprep_attempt_history_service_mq_consumer
+**Name:** ghcr.io/cs3219-ay2324s1-g04/peerprep_attempt_history_service_room_event_consumer
 
 **Description:** Listens to the message queue provided by room-service.
 

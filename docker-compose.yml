@@ -59,11 +59,11 @@ services:
       - attempt_history_service_database
     restart: unless-stopped
 
-  attempt_history_service_mq_consumer:
-    image: ghcr.io/cs3219-ay2324s1-g04/peerprep_attempt_history_service_mq_consumer
+  attempt_history_service_room_event_consumer:
+    image: ghcr.io/cs3219-ay2324s1-g04/peerprep_attempt_history_service_room_event_consumer
     build:
       context: .
-      dockerfile: ./dockerfiles/mq_consumer.dockerfile
+      dockerfile: ./dockerfiles/room_event_consumer.dockerfile
     networks:
       - peerprep
     environment:

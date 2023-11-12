@@ -20,7 +20,7 @@ export_dir="./docker_build"
 ################################################################################
 
 # This list should contain a unique key for each image.
-image_keys=(api database_initialiser mq_consumer)
+image_keys=(api database_initialiser room_event_consumer)
 
 # API image
 images_api_name=${cr}peerprep_attempt_history_service_api
@@ -33,9 +33,9 @@ images_database_initialiser_docker_file="./dockerfiles/database_initialiser.dock
 images_database_initialiser_should_build=0
 
 # MQ Consumer image
-images_mq_consumer_name=${cr}peerprep_attempt_history_service_mq_consumer
-images_mq_consumer_docker_file="./dockerfiles/mq_consumer.dockerfile"
-images_mq_consumer_should_build=0
+images_room_event_consumer_name=${cr}peerprep_attempt_history_service_room_event_consumer
+images_room_event_consumer_docker_file="./dockerfiles/room_event_consumer.dockerfile"
+images_room_event_consumer_should_build=0
 
 ################################################################################
 #                                                                              #
