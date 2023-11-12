@@ -29,7 +29,7 @@ images_api_should_build=0
 
 # # Database initialiser image
 images_database_initialiser_name=${cr}peerprep_attempt_history_service_database_initialiser
-images_database_initialiser_docker_file="./dockerfiles/database_initializer.dockerfile"
+images_database_initialiser_docker_file="./dockerfiles/database_initialiser.dockerfile"
 images_database_initialiser_should_build=0
 
 # MQ Consumer image
