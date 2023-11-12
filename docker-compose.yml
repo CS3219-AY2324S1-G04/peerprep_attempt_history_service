@@ -2,22 +2,21 @@ version: "3"
 services:
   attempt_history_service_database:
     image: postgres:16-bookworm
+    networks:
+      - peerprep
     environment:
       POSTGRES_USER: ${HS_DB_USER}
       POSTGRES_PASSWORD: ${HS_DB_PASS}
       POSTGRES_DB: ${HS_DB}
     restart: unless-stopped
 
-    networks:
-      - peerprep
-
   attempt_history_service_database_init:
+    image: ghcr.io/cs3219-ay2324s1-g04/peerprep_attempt_history_service_database_initialiser
     build:
       context: .
       dockerfile: ./dockerfiles/database_initialiser.dockerfile
-    depends_on:
-      - attempt_history_service_database
-    image: ghcr.io/cs3219-ay2324s1-g04/peerprep_attempt_history_service_database_initialiser
+    networks:
+      - peerprep
     environment:
       HS_DB_HOST : attempt_history_service_database
       HS_DB_PORT: ${HS_DB_PORT}
@@ -28,20 +27,19 @@ services:
       DATABASE_CONNECTION_TIMEOUT_MILLIS : ${DATABASE_CONNECTION_TIMEOUT_MILLIS}
       DATABASE_MAX_CLIENT_COUNT : ${DATABASE_MAX_CLIENT_COUNT}
       SHOULD_FORCE_INITIALISATION : ${SHOULD_FORCE_INITIALISATION}
-
+    depends_on:
+      - attempt_history_service_database
     restart: on-failure
 
-    networks:
-      - peerprep
-
   attempt_history_service_api:
+    image: ghcr.io/cs3219-ay2324s1-g04/peerprep_attempt_history_service_api
     build:
       context: .
       dockerfile: ./dockerfiles/api.dockerfile
-    depends_on:
-      - attempt_history_service_database
-    image: ghcr.io/cs3219-ay2324s1-g04/peerprep_attempt_history_service_api
-    restart: unless-stopped
+    networks:
+      - peerprep
+    ports:
+       - ${HS_EXPRESS_PORT}:${HS_EXPRESS_PORT}
     environment:
       HS_EXPRESS_PORT : ${HS_EXPRESS_PORT}
       NODE_ENV : ${NODE_ENV}
@@ -58,23 +56,18 @@ services:
 
       SERVICE_USER_HOST: user_service_api
       SERVICE_USER_PORT: ${SERVICE_USER_PORT}
-
-    ports:
-       - ${HS_EXPRESS_PORT}:${HS_EXPRESS_PORT}
-
-    networks:
-      - peerprep
+    depends_on:
+      - attempt_history_service_database
+    restart: unless-stopped
 
   attempt_history_service_mq_consumer:
+    image: ghcr.io/cs3219-ay2324s1-g04/peerprep_attempt_history_service_mq_consumer
     build:
       context: .
       dockerfile: ./dockerfiles/mq_consumer.dockerfile
-    depends_on:
-      - attempt_history_service_api
-    image: ghcr.io/cs3219-ay2324s1-g04/peerprep_attempt_history_service_mq_consumer
-    restart: unless-stopped
+    networks:
+      - peerprep
     environment:
-
       HS_HOST : attempt_history_service_api
       HS_PORT : ${HS_EXPRESS_PORT}
 
@@ -92,9 +85,9 @@ services:
 
       SERVICE_EDITOR_HOST: editor_service_api
       SERVICE_EDITOR_PORT: ${SERVICE_EDITOR_PORT}
-
-    networks:
-      - peerprep
+    depends_on:
+      - attempt_history_service_api
+    restart: unless-stopped
 
 networks:
   peerprep:
