@@ -61,11 +61,11 @@ export async function consumer(): Promise<void> {
           `?user=${data.room.userIds[1]}&${questionId}` +
           `&${roomId}&${language}`;
         await axios.post(
-          config.attemptHistoryURL + '/attempt-service/add' + userOne,
+          config.attemptHistoryURL + '/attempt-history-service/add' + userOne,
           requestBody,
         );
         await axios.post(
-          config.attemptHistoryURL + '/attempt-service/add' + userTwo,
+          config.attemptHistoryURL + '/attempt-history-service/add' + userTwo,
           requestBody,
         );
       } catch (error) {

@@ -1,5 +1,5 @@
 {
-  "name": "attempt_service",
+  "name": "attempt_history_service",
   "version": "1.0.0",
   "description": "Tracks user attempts ",
   "main": "main.js",

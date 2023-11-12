@@ -114,7 +114,7 @@ Legend:
 
 ### Get user attempt history
 
-> [GET] `/attempt-service/`
+> [GET] `/attempt-history-service/`
 
 **Cookies**
 
@@ -128,7 +128,7 @@ Legend:
 
 ### Get user attempt code
 
-> [GET] `/attempt-service/:aid`
+> [GET] `/attempt-history-service/:aid`
 
 **Description**
 This returns a particular user's attempt, in particular their code.
@@ -150,7 +150,7 @@ Note that the code return is in raw form, so there could be code injection prese
 
 ### Add to attempt history
 
-> [POST] `/attempt-service/add`
+> [POST] `/attempt-history-service/add`
 
 **Description**
 For internal use only.
@@ -174,7 +174,7 @@ Note that (user id, room id) is considered primary keys. That is to say, their c
 
 **Examples**
 
-> `attempt-service/add?user=4&question=4&room=fb137075-1ce0-4303-9e47-5182dac23a41&language=cpp`
+> `attempt-history-service/add?user=4&question=4&room=fb137075-1ce0-4303-9e47-5182dac23a41&language=cpp`
 
 > body `{ code : 'lorem ipsum' }`
 
