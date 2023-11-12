@@ -1,5 +1,5 @@
 /**
- * Entry point for rabbit.
+ * Entry point for MQ consumer.
  */
 import { consumer } from './rabbit';
 

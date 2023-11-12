@@ -7,7 +7,7 @@ services:
       POSTGRES_PASSWORD: ${HS_DB_PASS}
       POSTGRES_DB: ${HS_DB}
     restart: unless-stopped
-    
+
     networks:
       - peerprep
 
@@ -28,7 +28,7 @@ services:
       DATABASE_CONNECTION_TIMEOUT_MILLIS : ${DATABASE_CONNECTION_TIMEOUT_MILLIS}
       DATABASE_MAX_CLIENT_COUNT : ${DATABASE_MAX_CLIENT_COUNT}
       SHOULD_FORCE_INITIALISATION : ${SHOULD_FORCE_INITIALISATION}
-    
+
     restart: on-failure
 
     networks:
@@ -58,26 +58,26 @@ services:
 
       SERVICE_USER_HOST: user_service_api
       SERVICE_USER_PORT: ${SERVICE_USER_PORT}
-      
+
     ports:
        - ${HS_EXPRESS_PORT}:${HS_EXPRESS_PORT}
 
     networks:
       - peerprep
 
-  attempt_history_service_rabbit:
+  attempt_history_service_mq_consumer:
     build:
       context: .
-      dockerfile: ./dockerfiles/rabbit.dockerfile
+      dockerfile: ./dockerfiles/mq_consumer.dockerfile
     depends_on:
       - attempt_history_service_api
-    image: ghcr.io/cs3219-ay2324s1-g04/peerprep_attempt_history_service_rabbit
+    image: ghcr.io/cs3219-ay2324s1-g04/peerprep_attempt_history_service_mq_consumer
     restart: unless-stopped
     environment:
 
       HS_HOST : attempt_history_service_api
       HS_PORT : ${HS_EXPRESS_PORT}
-      
+
       SERVICE_ROOM_MQ_PASS: ${SERVICE_ROOM_MQ_PASS}
       SERVICE_ROOM_MQ_USER: ${SERVICE_ROOM_MQ_USER}
       SERVICE_ROOM_MQ_HOST: room_service_mq
@@ -86,13 +86,13 @@ services:
       SERVICE_ROOM_MQ_TLS: ${SERVICE_ROOM_MQ_TLS}
       SERVICE_ROOM_MQ_XCHANGE: ${SERVICE_ROOM_MQ_XCHANGE}
       SERVICE_ROOM_MQ_QNAME: ${SERVICE_ROOM_MQ_QNAME}
-      
+
       SERVICE_USER_HOST: user_service_api
       SERVICE_USER_PORT: ${SERVICE_USER_PORT}
 
       SERVICE_EDITOR_HOST: editor_service_api
       SERVICE_EDITOR_PORT: ${SERVICE_EDITOR_PORT}
-    
+
     networks:
       - peerprep
 

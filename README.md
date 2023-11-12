@@ -50,7 +50,7 @@ Legend:
 
 ### API
 
-**Name:** ghcr.io/cs3219-ay2324s1-g04/attempt_history_service_api
+**Name:** ghcr.io/cs3219-ay2324s1-g04/peerprep_attempt_history_service_api
 
 **Description:** Runs the REST API.
 
@@ -89,7 +89,7 @@ Legend:
 
 ### Message Queue Consumer
 
-**Name:** ghcr.io/cs3219-ay2324s1-g04/peerprep_attempt_history_service_rabbit
+**Name:** ghcr.io/cs3219-ay2324s1-g04/peerprep_attempt_history_service_mq_consumer
 
 **Description:** Listens to the message queue provided by room-service.
 
@@ -122,7 +122,7 @@ Legend:
 
 **Returns**
 
-- `200` - { message: "Success",  data : [{"attemptId":string,"questionId":string,"language":string,"date":date}] } 
+- `200` - { message: "Success",  data : [{"attemptId":string,"questionId":string,"language":string,"date":date}] }
 - `401` - { message: "Not authorized" }
 - `500` - { message: "Sever Error" }
 
@@ -131,7 +131,7 @@ Legend:
 > [GET] `/attempt-service/:aid`
 
 **Description**
-This returns a particular user's attempt, in particular their code. 
+This returns a particular user's attempt, in particular their code.
 
 Note that the code return is in raw form, so there could be code injection present.
 
@@ -144,7 +144,7 @@ Note that the code return is in raw form, so there could be code injection prese
 
 **Returns**
 
-- `200` - { message: "Success",  data : user's code } 
+- `200` - { message: "Success",  data : user's code }
 - `401` - { message: "Not authorized" }
 - `500` - { message: "Sever Error" }
 
