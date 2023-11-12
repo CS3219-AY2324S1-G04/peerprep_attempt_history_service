@@ -18,14 +18,15 @@ services:
     networks:
       - peerprep
     environment:
-      AHS_DB_HOST : attempt_history_service_database
-      AHS_DB_PORT: ${AHS_DB_PORT}
+      AHS_DB_HOST: attempt_history_service_database
+      AHS_DB_PORT: 5432
       AHS_DB_USER: ${AHS_DB_USER}
       AHS_DB_PASS: ${AHS_DB_PASS}
       AHS_DB: ${AHS_DB}
       DATABASE_SHOULD_USE_TLS : ${DATABASE_SHOULD_USE_TLS}
       DATABASE_CONNECTION_TIMEOUT_MILLIS : ${DATABASE_CONNECTION_TIMEOUT_MILLIS}
       DATABASE_MAX_CLIENT_COUNT : ${DATABASE_MAX_CLIENT_COUNT}
+
       SHOULD_FORCE_INITIALISATION : ${SHOULD_FORCE_INITIALISATION}
     depends_on:
       - attempt_history_service_database
@@ -45,16 +46,15 @@ services:
       NODE_ENV : ${NODE_ENV}
 
       AHS_DB_HOST : attempt_history_service_database
-      AHS_DB_PORT: ${AHS_DB_PORT}
+      AHS_DB_PORT: 5432
       AHS_DB_USER: ${AHS_DB_USER}
       AHS_DB_PASS: ${AHS_DB_PASS}
       AHS_DB: ${AHS_DB}
-
       DATABASE_SHOULD_USE_TLS : ${DATABASE_SHOULD_USE_TLS}
       DATABASE_CONNECTION_TIMEOUT_MILLIS : ${DATABASE_CONNECTION_TIMEOUT_MILLIS}
       DATABASE_MAX_CLIENT_COUNT : ${DATABASE_MAX_CLIENT_COUNT}
 
-      SERVICE_USER_HOST: user_service_api
+      SERVICE_USER_HOST: ${SERVICE_USER_HOST}
       SERVICE_USER_PORT: ${SERVICE_USER_PORT}
     depends_on:
       - attempt_history_service_database
@@ -73,17 +73,17 @@ services:
 
       SERVICE_ROOM_MQ_PASS: ${SERVICE_ROOM_MQ_PASS}
       SERVICE_ROOM_MQ_USER: ${SERVICE_ROOM_MQ_USER}
-      SERVICE_ROOM_MQ_HOST: room_service_mq
+      SERVICE_ROOM_MQ_HOST: ${SERVICE_ROOM_MQ_HOST}
       SERVICE_ROOM_MQ_PORT: ${SERVICE_ROOM_MQ_PORT}
       SERVICE_ROOM_MQ_VHOST: ${SERVICE_ROOM_MQ_VHOST}
       SERVICE_ROOM_MQ_TLS: ${SERVICE_ROOM_MQ_TLS}
       SERVICE_ROOM_MQ_XCHANGE: ${SERVICE_ROOM_MQ_XCHANGE}
       SERVICE_ROOM_MQ_QNAME: ${SERVICE_ROOM_MQ_QNAME}
 
-      SERVICE_USER_HOST: user_service_api
+      SERVICE_USER_HOST: ${SERVICE_USER_HOST}
       SERVICE_USER_PORT: ${SERVICE_USER_PORT}
 
-      SERVICE_EDITOR_HOST: editor_service_api
+      SERVICE_EDITOR_HOST: ${SERVICE_EDITOR_HOST}
       SERVICE_EDITOR_PORT: ${SERVICE_EDITOR_PORT}
     depends_on:
       - attempt_history_service_api
