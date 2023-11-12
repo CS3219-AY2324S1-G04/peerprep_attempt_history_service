@@ -67,9 +67,9 @@ spec:
               value: user-service-api-service
             - name: USER_SERVICE_PORT
               value: '9000'
-            - name: DOC_SERVICE_HOST
+            - name: DOCS_SERVICE_HOST
               value: docs-service-api-service
-            - name: DOC_SERVICE_PORT
+            - name: DOCS_SERVICE_PORT
               value: '9007'
           resources:
             requests:

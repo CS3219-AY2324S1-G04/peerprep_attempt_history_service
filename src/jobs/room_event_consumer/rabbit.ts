@@ -46,7 +46,7 @@ export async function consumer(): Promise<void> {
       let userCode = 'lorem ipsum';
       try {
         const getCode = await axios.get(
-          config.documentServiceURL + '/docs-service/docs/' + data.room.roomId,
+          config.docsServiceURL + '/docs-service/docs/' + data.room.roomId,
         );
         console.log(getCode.data.doc);
         userCode = getCode.data.doc;

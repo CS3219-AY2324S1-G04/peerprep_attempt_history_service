@@ -82,8 +82,8 @@ services:
       USER_SERVICE_HOST: ${USER_SERVICE_HOST}
       USER_SERVICE_PORT: ${USER_SERVICE_PORT}
 
-      DOC_SERVICE_HOST: ${DOC_SERVICE_HOST}
-      DOC_SERVICE_PORT: ${DOC_SERVICE_PORT}
+      DOCS_SERVICE_HOST: ${DOCS_SERVICE_HOST}
+      DOCS_SERVICE_PORT: ${DOCS_SERVICE_PORT}
     depends_on:
       - attempt_history_service_api
     restart: unless-stopped

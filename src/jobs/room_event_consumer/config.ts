@@ -26,8 +26,8 @@ export default class Config {
   private static readonly _envRoomMQQname: string =
     'ROOM_SERVICE_MQ_QUEUE_NAME';
 
-  private static readonly _envDocumentHost: string = 'DOC_SERVICE_HOST';
-  private static readonly _envDocumentPort: string = 'DOC_SERVICE_PORT';
+  private static readonly _envDocsHost: string = 'DOCS_SERVICE_HOST';
+  private static readonly _envDocsPort: string = 'DOCS_SERVICE_PORT';
 
   /** Other variables. */
   private static _instance: Config;
@@ -47,7 +47,7 @@ export default class Config {
   public readonly roomMQXchange: string;
   public readonly roomMQQname: string;
 
-  public readonly documentServiceURL: string;
+  public readonly docsServiceURL: string;
 
   /** Copies from Development variables. */
   public readonly isDevEnv: boolean;
@@ -83,9 +83,9 @@ export default class Config {
       this.roomMQXchange = 'room-events';
       this.roomMQQname = 'attempt-history-service-room-event-queue';
 
-      const documentServiceHost = 'localhost';
-      const documentServicePort = 9004;
-      this.documentServiceURL = `http://${documentServiceHost}:${documentServicePort}`;
+      const docsServiceHost = 'localhost';
+      const docsServicePort = 9004;
+      this.docsServiceURL = `http://${docsServiceHost}:${docsServicePort}`;
     } else {
       const attemptHistoryHost = this._getEnvAsString(
         env,
@@ -121,9 +121,9 @@ export default class Config {
       this.roomMQXchange = this._getEnvAsString(env, Config._envRoomMQXchange);
       this.roomMQQname = this._getEnvAsString(env, Config._envRoomMQQname);
 
-      const documentHost = this._getEnvAsString(env, Config._envDocumentHost);
-      const documentPort = this._getEnvAsInt(env, Config._envDocumentPort);
-      this.documentServiceURL = `http://${documentHost}:${documentPort}`;
+      const docsHost = this._getEnvAsString(env, Config._envDocsHost);
+      const docsPort = this._getEnvAsInt(env, Config._envDocsPort);
+      this.docsServiceURL = `http://${docsHost}:${docsPort}`;
     }
   }
 
