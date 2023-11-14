@@ -1,6 +1,6 @@
 # PeerPrep Attempt History Service
 
-Keeps tracks of the user's attempts.
+Keeps track of the user's attempts.
 
 - [Build Script](#build-script)
 - [Architecture](#architecture)
@@ -40,7 +40,6 @@ Legend:
 **REST API Server**
 
 - Handles REST API requests.
-- Exposed to clients/servers outside the service.
 - Can be scaled horizontally.
 - Corresponds to the [API](#api) docker image.
 
@@ -82,13 +81,13 @@ Legend:
 - `USER_SERVICE_HOST` - Address of the User Service host.
 - `USER_SERVICE_PORT` - Port the User Service is listening on.
 - `API_PORT` - Port to listen on.
-- `NODE_ENV` - Mode the app is running on ("development" or "production").
+- `NODE_ENV` - Mode the app is running in ("development" or "production").
 
 ### Database Initialiser
 
 **Name:** ghcr.io/cs3219-ay2324s1-g04/peerprep_attempt_history_service_database_initialiser
 
-**Description:** Initialises the database by creating and setting up the necessary tables.
+**Description:** Initialises the database by creating the necessary entities.
 
 **Environment Variables:**
 
@@ -106,24 +105,24 @@ Legend:
 
 **Name:** ghcr.io/cs3219-ay2324s1-g04/peerprep_attempt_history_service_room_event_consumer
 
-**Description:** Listens to the message queue provided by Room Service.
+**Description:** Listens for "remove user from room event" from the Room Service MQ and adds an attempt history when such events are consumed.
 
 **Environment Variables:**
 
 - `API_HOST` - Address of Attempt History Service API Server.
 - `API_PORT` - Port of Attempt History Service API Server.
-- `ROOM_SERVICE_MQ_USER` - User on the MQ host.
-- `ROOM_SERVICE_MQ_PASSWORD` - Password of the MQ.
-- `ROOM_SERVICE_MQ_HOST` - Address of the MQ host.
-- `ROOM_SERVICE_MQ_PORT` - Port the MQ is listening on.
-- `ROOM_SERVICE_MQ_VHOST` - Vhost of the MQ.
-- `ROOM_SERVICE_MQ_SHOULD_USE_TLS` - Should MQ connection be secured with TLS. Set to "true" to enable.
-- `ROOM_SERVICE_MQ_EXCHANGE_NAME` - Name of the MQ exchange.
-- `ROOM_SERVICE_MQ_QUEUE_NAME` - Name of the MQ queue.
+- `ROOM_SERVICE_MQ_USER` - User on the Room Service MQ host.
+- `ROOM_SERVICE_MQ_PASSWORD` - Password of the Room Service MQ.
+- `ROOM_SERVICE_MQ_HOST` - Address of the Room Service MQ host.
+- `ROOM_SERVICE_MQ_PORT` - Port the Room Service MQ is listening on.
+- `ROOM_SERVICE_MQ_VHOST` - Vhost of the Room Service MQ.
+- `ROOM_SERVICE_MQ_SHOULD_USE_TLS` - Should Room Service MQ connection be secured with TLS. Set to "true" to enable.
+- `ROOM_SERVICE_MQ_EXCHANGE_NAME` - Name of the Room Service MQ exchange.
+- `ROOM_SERVICE_MQ_QUEUE_NAME` - Name of the Room Service MQ queue.
 - `USER_SERVICE_HOST` - Address of the User Service host.
 - `USER_SERVICE_PORT` - Port the User Service is listening on.
-- `DOCS_SERVICE_HOST` - Address of the Docs Service.
-- `DOCS_SERVICE_PORT` - Port the Docs Service.
+- `DOCS_SERVICE_HOST` - Address of the Docs Service host.
+- `DOCS_SERVICE_PORT` - Port the Docs Service is listening on.
 
 ## Deployment
 
@@ -212,9 +211,9 @@ Note that the code return is in raw form, so there could be code injection prese
 
 > [POST] `/attempt-history-service/add`
 
-For internal use only.
-
 Note that (user id, room id) is considered primary keys. That is to say, their combination is what makes an entry unique.
+
+WARNING: This endpoint is potentially abusable. It should be inaccessible by the frontend.
 
 **Parameters**
 
