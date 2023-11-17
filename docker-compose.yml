@@ -11,7 +11,7 @@ services:
     restart: unless-stopped
 
   attempt_history_service_database_initialiser:
-    image: ghcr.io/cs3219-ay2324s1-g04/peerprep_attempt_history_service_database_initialiser
+    image: ghcr.io/cs3219-ay2324s1-g04/peerprep_attempt_history_service_database_initialiser:demo
     build:
       context: .
       dockerfile: ./dockerfiles/database_initialiser.dockerfile
@@ -32,7 +32,7 @@ services:
     restart: on-failure
 
   attempt_history_service_api:
-    image: ghcr.io/cs3219-ay2324s1-g04/peerprep_attempt_history_service_api
+    image: ghcr.io/cs3219-ay2324s1-g04/peerprep_attempt_history_service_api:demo
     build:
       context: .
       dockerfile: ./dockerfiles/api.dockerfile
@@ -60,7 +60,7 @@ services:
     restart: unless-stopped
 
   attempt_history_service_room_event_consumer:
-    image: ghcr.io/cs3219-ay2324s1-g04/peerprep_attempt_history_service_room_event_consumer
+    image: ghcr.io/cs3219-ay2324s1-g04/peerprep_attempt_history_service_room_event_consumer:demo
     build:
       context: .
       dockerfile: ./dockerfiles/room_event_consumer.dockerfile
